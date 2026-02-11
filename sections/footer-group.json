@@ -1,0 +1,44 @@
+{
+    "name": "Footer",
+    "type": "footer",
+    "sections": {
+        "footer": {
+            "type": "footer",
+            "blocks": {
+                "menu-1": {
+                    "type": "menu",
+                    "settings": {
+                        "title": "Shop",
+                        "menu": "footer"
+                    }
+                },
+                "menu-2": {
+                    "type": "menu",
+                    "settings": {
+                        "title": "About",
+                        "menu": "footer"
+                    }
+                }
+            },
+            "block_order": [
+                "menu-1",
+                "menu-2"
+            ],
+            "settings": {
+                "footer_text": "Premium fashion for the modern wardrobe.",
+                "newsletter_heading": "Stay Connected",
+                "newsletter_text": "Subscribe for exclusive offers and updates.",
+                "show_social": true,
+                "show_payment_icons": true
+            }
+        },
+        "cart-drawer": {
+            "type": "cart-drawer",
+            "settings": {}
+        }
+    },
+    "order": [
+        "footer",
+        "cart-drawer"
+    ]
+}

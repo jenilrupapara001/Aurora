@@ -1,0 +1,66 @@
+<section class="main-page section" data-section-id="{{ section.id }}">
+  <div class="container">
+    <div class="page-content">
+      <h1 class="page-title">{{ page.title }}</h1>
+      
+      <div class="page-body">
+        {{ page.content }}
+      </div>
+    </div>
+  </div>
+</section>
+
+<style>
+  .page-content {
+    max-width: 800px;
+    margin: 0 auto;
+  }
+
+  .page-title {
+    text-align: center;
+    font-size: 2.5rem;
+    margin-bottom: 2rem;
+  }
+
+  .page-body {
+    font-size: 1.125rem;
+    line-height: 1.8;
+  }
+
+  .page-body h2 {
+    margin-top: 2rem;
+    margin-bottom: 1rem;
+  }
+
+  .page-body h3 {
+    margin-top: 1.5rem;
+    margin-bottom: 0.75rem;
+  }
+
+  .page-body p {
+    margin-bottom: 1.5rem;
+  }
+
+  .page-body ul,
+  .page-body ol {
+    margin-bottom: 1.5rem;
+    padding-left: 2rem;
+  }
+
+  .page-body li {
+    margin-bottom: 0.5rem;
+  }
+
+  .page-body img {
+    max-width: 100%;
+    height: auto;
+    margin: 2rem 0;
+  }
+</style>
+
+{% schema %}
+{
+  "name": "Page",
+  "settings": []
+}
+{% endschema %}
