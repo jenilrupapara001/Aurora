@@ -1,0 +1,233 @@
+{%- liquid
+  assign collection = collection
+  assign products_per_page = section.settings.products_per_page
+  assign enable_filtering = section.settings.enable_filtering
+  assign enable_sorting = section.settings.enable_sorting
+  assign columns_desktop = section.settings.columns_desktop
+  assign columns_mobile = section.settings.columns_mobile
+-%}
+
+<section class="collection-main section" data-section-id="{{ section.id }}">
+  <div class="container">
+    {%- if enable_filtering or enable_sorting -%}
+      <div class="collection-toolbar">
+        {%- if enable_filtering -%}
+          <button type="button" class="collection-toolbar__filter-toggle hide-desktop">
+            Filter & Sort
+          </button>
+        {%- endif -%}
+
+        {%- if enable_sorting -%}
+          <div class="collection-toolbar__sort">
+            <label for="SortBy" class="collection-toolbar__label">
+              {{ 'collections.sorting.title' | t }}
+            </label>
+            <select id="SortBy" class="form-select" onchange="location.href=this.value">
+              {%- assign sort_by = collection.sort_by | default: collection.default_sort_by -%}
+              <option value="{{ collection.url }}?sort_by=manual" {% if sort_by == 'manual' %}selected{% endif %}>
+                {{ 'collections.sorting.featured' | t }}
+              </option>
+              <option value="{{ collection.url }}?sort_by=best-selling" {% if sort_by == 'best-selling' %}selected{% endif %}>
+                {{ 'collections.sorting.best_selling' | t }}
+              </option>
+              <option value="{{ collection.url }}?sort_by=title-ascending" {% if sort_by == 'title-ascending' %}selected{% endif %}>
+                {{ 'collections.sorting.alphabetically_a_z' | t }}
+              </option>
+              <option value="{{ collection.url }}?sort_by=title-descending" {% if sort_by == 'title-descending' %}selected{% endif %}>
+                {{ 'collections.sorting.alphabetically_z_a' | t }}
+              </option>
+              <option value="{{ collection.url }}?sort_by=price-ascending" {% if sort_by == 'price-ascending' %}selected{% endif %}>
+                {{ 'collections.sorting.price_low_to_high' | t }}
+              </option>
+              <option value="{{ collection.url }}?sort_by=price-descending" {% if sort_by == 'price-descending' %}selected{% endif %}>
+                {{ 'collections.sorting.price_high_to_low' | t }}
+              </option>
+              <option value="{{ collection.url }}?sort_by=created-descending" {% if sort_by == 'created-descending' %}selected{% endif %}>
+                {{ 'collections.sorting.date_new_to_old' | t }}
+              </option>
+            </select>
+          </div>
+        {%- endif -%}
+
+        <div class="collection-toolbar__count">
+          {{ collection.products_count }} {{ 'collections.general.items_with_count.other' | t: count: collection.products_count }}
+        </div>
+      </div>
+    {%- endif -%}
+
+    {%- if collection.products.size > 0 -%}
+      <div class="grid grid--{{ columns_desktop }}-col" data-mobile-columns="{{ columns_mobile }}">
+        {%- for product in collection.products -%}
+          {% render 'product-card', product: product %}
+        {%- endfor -%}
+      </div>
+
+      {%- if paginate.pages > 1 -%}
+        <div class="pagination">
+          {%- if paginate.previous -%}
+            <a href="{{ paginate.previous.url }}" class="pagination__link">
+              {% render 'icon', icon: 'chevron-left' %}
+              Previous
+            </a>
+          {%- endif -%}
+
+          <span class="pagination__text">
+            Page {{ paginate.current_page }} of {{ paginate.pages }}
+          </span>
+
+          {%- if paginate.next -%}
+            <a href="{{ paginate.next.url }}" class="pagination__link">
+              Next
+              {% render 'icon', icon: 'chevron-right' %}
+            </a>
+          {%- endif -%}
+        </div>
+      {%- endif -%}
+    {%- else -%}
+      <div class="collection-empty">
+        <p>{{ 'collections.general.no_matches' | t }}</p>
+      </div>
+    {%- endif -%}
+  </div>
+</section>
+
+<style>
+  .collection-toolbar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1.5rem;
+    margin-bottom: 2rem;
+    padding-bottom: 1.5rem;
+    border-bottom: 1px solid var(--color-border);
+  }
+
+  .collection-toolbar__filter-toggle {
+    background: none;
+    border: 2px solid var(--color-primary);
+    padding: 0.75rem 1.5rem;
+    font-size: 0.875rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    cursor: pointer;
+  }
+
+  .collection-toolbar__sort {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+  }
+
+  .collection-toolbar__label {
+    font-size: 0.875rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+  }
+
+  .collection-toolbar__count {
+    font-size: 0.875rem;
+    color: var(--color-text-secondary);
+  }
+
+  .pagination {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 2rem;
+    margin-top: 4rem;
+  }
+
+  .pagination__link {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-size: 0.875rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+  }
+
+  .pagination__link svg {
+    width: 16px;
+    height: 16px;
+  }
+
+  .pagination__text {
+    font-size: 0.875rem;
+    color: var(--color-text-secondary);
+  }
+
+  .collection-empty {
+    text-align: center;
+    padding: 4rem 0;
+    color: var(--color-text-secondary);
+  }
+
+  @media (max-width: 767px) {
+    [data-mobile-columns="1"] {
+      grid-template-columns: 1fr;
+    }
+    
+    [data-mobile-columns="2"] {
+      grid-template-columns: repeat(2, 1fr);
+    }
+  }
+</style>
+
+{% schema %}
+{
+  "name": "Collection Products",
+  "tag": "section",
+  "class": "section",
+  "settings": [
+    {
+      "type": "range",
+      "id": "products_per_page",
+      "min": 8,
+      "max": 50,
+      "step": 4,
+      "default": 24,
+      "label": "Products per page"
+    },
+    {
+      "type": "checkbox",
+      "id": "enable_filtering",
+      "label": "Enable filtering",
+      "default": true
+    },
+    {
+      "type": "checkbox",
+      "id": "enable_sorting",
+      "label": "Enable sorting",
+      "default": true
+    },
+    {
+      "type": "range",
+      "id": "columns_desktop",
+      "min": 2,
+      "max": 5,
+      "step": 1,
+      "default": 4,
+      "label": "Desktop columns"
+    },
+    {
+      "type": "select",
+      "id": "columns_mobile",
+      "label": "Mobile columns",
+      "options": [
+        {
+          "value": "1",
+          "label": "1 column"
+        },
+        {
+          "value": "2",
+          "label": "2 columns"
+        }
+      ],
+      "default": "2"
+    }
+  ]
+}
+{% endschema %}

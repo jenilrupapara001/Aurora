@@ -1,0 +1,52 @@
+{
+    "sections": {
+        "hero": {
+            "type": "hero-banner",
+            "settings": {
+                "heading": "Elevate Your Style",
+                "subheading": "New Collection",
+                "button_text": "Shop Now",
+                "height": "large",
+                "text_alignment": "center",
+                "overlay_opacity": 30
+            }
+        },
+        "featured-collections": {
+            "type": "featured-collections",
+            "blocks": {
+                "collection-1": {
+                    "type": "collection",
+                    "settings": {}
+                },
+                "collection-2": {
+                    "type": "collection",
+                    "settings": {}
+                },
+                "collection-3": {
+                    "type": "collection",
+                    "settings": {}
+                }
+            },
+            "block_order": [
+                "collection-1",
+                "collection-2",
+                "collection-3"
+            ],
+            "settings": {
+                "heading": "Shop by Category"
+            }
+        },
+        "featured-products": {
+            "type": "featured-products",
+            "settings": {
+                "heading": "Trending Now",
+                "products_to_show": 8
+            }
+        }
+    },
+    "order": [
+        "hero",
+        "featured-collections",
+        "featured-products"
+    ]
+}

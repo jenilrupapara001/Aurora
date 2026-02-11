@@ -1,0 +1,56 @@
+{%- liquid
+  assign heading = section.settings.heading
+  assign products_to_show = section.settings.products_to_show
+  assign product_id = product.id
+-%}
+
+<section class="product-recommendations section" data-section-id="{{ section.id }}">
+  <div class="container">
+    <h2 class="section-heading">{{ heading }}</h2>
+
+    <div class="product-recommendations__grid" data-product-id="{{ product_id }}">
+      {%- comment -%} Recommendations will be loaded via Shopify's recommendations API {%- endcomment -%}
+      <div class="grid grid--4-col" id="recommendations-{{ section.id }}">
+        {%- comment -%} Products loaded via JavaScript {%- endcomment -%}
+      </div>
+    </div>
+  </div>
+</section>
+
+<script>
+  fetch(`/recommendations/products.json?product_id={{ product_id }}&limit={{ products_to_show }}`)
+    .then(response => response.json())
+    .then(data => {
+      if (data.products && data.products.length > 0) {
+        const container = document.getElementById('recommendations-{{ section.id }}');
+        // In a real implementation, you would render product cards here
+        // For now, this is a placeholder for the Shopify recommendations API
+      }
+    })
+    .catch(error => console.error('Error loading recommendations:', error));
+</script>
+
+{% schema %}
+{
+  "name": "Product Recommendations",
+  "tag": "section",
+  "class": "section",
+  "settings": [
+    {
+      "type": "text",
+      "id": "heading",
+      "label": "Heading",
+      "default": "You May Also Like"
+    },
+    {
+      "type": "range",
+      "id": "products_to_show",
+      "min": 2,
+      "max": 10,
+      "step": 1,
+      "default": 4,
+      "label": "Products to show"
+    }
+  ]
+}
+{% endschema %}

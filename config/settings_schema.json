@@ -1,0 +1,379 @@
+[
+  {
+    "name": "theme_info",
+    "theme_name": "Aurora Fashion OS 2.0",
+    "theme_version": "1.0.0",
+    "theme_author": "Aurora Themes",
+    "theme_documentation_url": "https://aurora-themes.com/docs",
+    "theme_support_url": "https://aurora-themes.com/support"
+  },
+  {
+    "name": "Colors",
+    "settings": [
+      {
+        "type": "header",
+        "content": "Color Palette"
+      },
+      {
+        "type": "color",
+        "id": "color_primary",
+        "label": "Primary Accent",
+        "default": "#1a1a1a",
+        "info": "Used for CTAs and key interactive elements"
+      },
+      {
+        "type": "color",
+        "id": "color_primary_hover",
+        "label": "Primary Hover",
+        "default": "#000000"
+      },
+      {
+        "type": "color",
+        "id": "color_neutral_light",
+        "label": "Neutral Light",
+        "default": "#ffffff",
+        "info": "Background and card surfaces"
+      },
+      {
+        "type": "color",
+        "id": "color_neutral_medium",
+        "label": "Neutral Medium",
+        "default": "#f5f5f5"
+      },
+      {
+        "type": "color",
+        "id": "color_neutral_dark",
+        "label": "Neutral Dark",
+        "default": "#1a1a1a",
+        "info": "Primary text color"
+      },
+      {
+        "type": "color",
+        "id": "color_text_secondary",
+        "label": "Secondary Text",
+        "default": "#666666"
+      },
+      {
+        "type": "color",
+        "id": "color_highlight",
+        "label": "Highlight",
+        "default": "#ff6b6b",
+        "info": "Sale badges, urgency elements"
+      },
+      {
+        "type": "color",
+        "id": "color_success",
+        "label": "Success",
+        "default": "#51cf66"
+      },
+      {
+        "type": "color",
+        "id": "color_border",
+        "label": "Border",
+        "default": "#e0e0e0"
+      }
+    ]
+  },
+  {
+    "name": "Typography",
+    "settings": [
+      {
+        "type": "header",
+        "content": "Font Settings"
+      },
+      {
+        "type": "font_picker",
+        "id": "font_heading",
+        "label": "Heading Font",
+        "default": "assistant_n4",
+        "info": "Used for headlines and section titles"
+      },
+      {
+        "type": "font_picker",
+        "id": "font_body",
+        "label": "Body Font",
+        "default": "assistant_n4",
+        "info": "Used for body text and descriptions"
+      },
+      {
+        "type": "range",
+        "id": "font_size_base",
+        "min": 14,
+        "max": 20,
+        "step": 1,
+        "unit": "px",
+        "label": "Base Font Size",
+        "default": 16
+      },
+      {
+        "type": "range",
+        "id": "heading_scale",
+        "min": 1.1,
+        "max": 1.5,
+        "step": 0.05,
+        "label": "Heading Scale",
+        "default": 1.25,
+        "info": "Multiplier for heading sizes"
+      }
+    ]
+  },
+  {
+    "name": "Layout",
+    "settings": [
+      {
+        "type": "header",
+        "content": "Global Layout"
+      },
+      {
+        "type": "range",
+        "id": "layout_max_width",
+        "min": 1200,
+        "max": 1600,
+        "step": 50,
+        "unit": "px",
+        "label": "Max Content Width",
+        "default": 1400
+      },
+      {
+        "type": "range",
+        "id": "spacing_sections",
+        "min": 40,
+        "max": 120,
+        "step": 10,
+        "unit": "px",
+        "label": "Section Spacing",
+        "default": 80
+      },
+      {
+        "type": "select",
+        "id": "layout_style",
+        "label": "Layout Style",
+        "options": [
+          {
+            "value": "minimal",
+            "label": "Luxury Minimal"
+          },
+          {
+            "value": "editorial",
+            "label": "Editorial Magazine"
+          },
+          {
+            "value": "bold",
+            "label": "Bold Streetwear"
+          }
+        ],
+        "default": "minimal"
+      }
+    ]
+  },
+  {
+    "name": "Product Cards",
+    "settings": [
+      {
+        "type": "header",
+        "content": "Product Card Settings"
+      },
+      {
+        "type": "checkbox",
+        "id": "product_card_show_vendor",
+        "label": "Show vendor name",
+        "default": false
+      },
+      {
+        "type": "checkbox",
+        "id": "product_card_show_quick_add",
+        "label": "Show quick add button",
+        "default": true
+      },
+      {
+        "type": "checkbox",
+        "id": "product_card_hover_variant",
+        "label": "Show variant preview on hover",
+        "default": true,
+        "info": "Shows second image on hover"
+      },
+      {
+        "type": "select",
+        "id": "product_card_badge_style",
+        "label": "Badge Style",
+        "options": [
+          {
+            "value": "minimal",
+            "label": "Minimal"
+          },
+          {
+            "value": "bold",
+            "label": "Bold"
+          },
+          {
+            "value": "pill",
+            "label": "Pill"
+          }
+        ],
+        "default": "minimal"
+      }
+    ]
+  },
+  {
+    "name": "Smart Features",
+    "settings": [
+      {
+        "type": "header",
+        "content": "AI & Smart Merchandising"
+      },
+      {
+        "type": "checkbox",
+        "id": "smart_sorting_enabled",
+        "label": "Enable smart product sorting",
+        "default": true,
+        "info": "Prioritizes bestsellers and low-stock items"
+      },
+      {
+        "type": "checkbox",
+        "id": "urgency_badges_enabled",
+        "label": "Show urgency badges",
+        "default": true,
+        "info": "Low stock, trending, almost gone labels"
+      },
+      {
+        "type": "range",
+        "id": "low_stock_threshold",
+        "min": 1,
+        "max": 20,
+        "step": 1,
+        "label": "Low Stock Threshold",
+        "default": 5,
+        "info": "Show urgency when inventory is below this number"
+      },
+      {
+        "type": "checkbox",
+        "id": "ai_recommendations_enabled",
+        "label": "Enable AI outfit recommendations",
+        "default": true
+      }
+    ]
+  },
+  {
+    "name": "Performance",
+    "settings": [
+      {
+        "type": "header",
+        "content": "Performance Optimization"
+      },
+      {
+        "type": "checkbox",
+        "id": "lazy_load_images",
+        "label": "Enable lazy loading",
+        "default": true
+      },
+      {
+        "type": "checkbox",
+        "id": "preload_fonts",
+        "label": "Preload custom fonts",
+        "default": true
+      },
+      {
+        "type": "select",
+        "id": "image_quality",
+        "label": "Image Quality",
+        "options": [
+          {
+            "value": "low",
+            "label": "Low (faster)"
+          },
+          {
+            "value": "medium",
+            "label": "Medium"
+          },
+          {
+            "value": "high",
+            "label": "High (slower)"
+          }
+        ],
+        "default": "medium"
+      }
+    ]
+  },
+  {
+    "name": "Cart",
+    "settings": [
+      {
+        "type": "header",
+        "content": "Cart Settings"
+      },
+      {
+        "type": "select",
+        "id": "cart_type",
+        "label": "Cart Type",
+        "options": [
+          {
+            "value": "drawer",
+            "label": "Slide Drawer"
+          },
+          {
+            "value": "page",
+            "label": "Cart Page"
+          }
+        ],
+        "default": "drawer"
+      },
+      {
+        "type": "checkbox",
+        "id": "cart_show_cross_sell",
+        "label": "Show cross-sell recommendations",
+        "default": true
+      },
+      {
+        "type": "text",
+        "id": "cart_free_shipping_threshold",
+        "label": "Free Shipping Threshold",
+        "default": "100",
+        "info": "Amount needed for free shipping (numbers only)"
+      },
+      {
+        "type": "checkbox",
+        "id": "cart_show_urgency",
+        "label": "Show urgency messaging",
+        "default": true
+      }
+    ]
+  },
+  {
+    "name": "Mobile",
+    "settings": [
+      {
+        "type": "header",
+        "content": "Mobile Optimization"
+      },
+      {
+        "type": "checkbox",
+        "id": "mobile_sticky_buy_button",
+        "label": "Enable sticky buy button",
+        "default": true
+      },
+      {
+        "type": "checkbox",
+        "id": "mobile_thumb_zone_nav",
+        "label": "Optimize for thumb zone",
+        "default": true,
+        "info": "Places key actions in easy-to-reach areas"
+      },
+      {
+        "type": "select",
+        "id": "mobile_product_grid",
+        "label": "Mobile Product Grid",
+        "options": [
+          {
+            "value": "1",
+            "label": "1 Column"
+          },
+          {
+            "value": "2",
+            "label": "2 Columns"
+          }
+        ],
+        "default": "2"
+      }
+    ]
+  }
+]

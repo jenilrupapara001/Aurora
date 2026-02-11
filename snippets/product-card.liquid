@@ -1,0 +1,93 @@
+{%- comment -%}
+  Product Card Component
+  Usage: {% render 'product-card', product: product %}
+{%- endcomment -%}
+
+{%- liquid
+  assign show_vendor = settings.product_card_show_vendor
+  assign show_quick_add = settings.product_card_show_quick_add
+  assign hover_variant = settings.product_card_hover_variant
+  assign badge_style = settings.product_card_badge_style
+  assign urgency_enabled = settings.urgency_badges_enabled
+  assign low_stock_threshold = settings.low_stock_threshold
+-%}
+
+<div class="product-card">
+  <a href="{{ product.url }}" class="product-card__media">
+    {%- if product.featured_image -%}
+      <img
+        srcset="{{ product.featured_image | image_url: width: 400 }} 400w,
+                {{ product.featured_image | image_url: width: 600 }} 600w,
+                {{ product.featured_image | image_url: width: 800 }} 800w"
+        src="{{ product.featured_image | image_url: width: 600 }}"
+        sizes="(min-width: 768px) 25vw, 50vw"
+        alt="{{ product.featured_image.alt | escape }}"
+        class="product-card__image"
+        loading="lazy"
+        width="{{ product.featured_image.width }}"
+        height="{{ product.featured_image.height }}"
+      >
+      
+      {%- if hover_variant and product.images[1] -%}
+        <img
+          srcset="{{ product.images[1] | image_url: width: 400 }} 400w,
+                  {{ product.images[1] | image_url: width: 600 }} 600w,
+                  {{ product.images[1] | image_url: width: 800 }} 800w"
+          src="{{ product.images[1] | image_url: width: 600 }}"
+          sizes="(min-width: 768px) 25vw, 50vw"
+          alt="{{ product.images[1].alt | escape }}"
+          class="product-card__image product-card__image--hover"
+          loading="lazy"
+          width="{{ product.images[1].width }}"
+          height="{{ product.images[1].height }}"
+        >
+      {%- endif -%}
+    {%- endif -%}
+
+    {%- comment -%} Smart Badges {%- endcomment -%}
+    {%- if product.compare_at_price > product.price -%}
+      <span class="product-card__badge badge--sale">Sale</span>
+    {%- elsif product.tags contains 'new' -%}
+      <span class="product-card__badge badge--new">New</span>
+    {%- elsif urgency_enabled -%}
+      {%- assign total_inventory = 0 -%}
+      {%- for variant in product.variants -%}
+        {%- assign total_inventory = total_inventory | plus: variant.inventory_quantity -%}
+      {%- endfor -%}
+      {%- if total_inventory > 0 and total_inventory <= low_stock_threshold -%}
+        <span class="product-card__badge badge--low-stock">Almost Gone</span>
+      {%- endif -%}
+    {%- endif -%}
+
+    {%- if show_quick_add and product.available -%}
+      <div class="product-card__quick-add">
+        {%- if product.variants.size == 1 -%}
+          <button
+            type="button"
+            class="button button--full"
+            data-variant-id="{{ product.selected_or_first_available_variant.id }}"
+            onclick="window.aurora.addToCart({{ product.selected_or_first_available_variant.id }})"
+          >
+            Quick Add
+          </button>
+        {%- else -%}
+          <a href="{{ product.url }}" class="button button--full">
+            Select Options
+          </a>
+        {%- endif -%}
+      </div>
+    {%- endif -%}
+  </a>
+
+  <div class="product-card__info">
+    {%- if show_vendor and product.vendor != blank -%}
+      <p class="product-card__vendor">{{ product.vendor }}</p>
+    {%- endif -%}
+
+    <h3 class="product-card__title">
+      <a href="{{ product.url }}">{{ product.title }}</a>
+    </h3>
+
+    {% render 'price-badge', product: product %}
+  </div>
+</div>

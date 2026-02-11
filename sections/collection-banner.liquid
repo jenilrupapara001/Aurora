@@ -1,0 +1,95 @@
+{%- liquid
+  assign collection = collection
+  assign show_description = section.settings.show_collection_description
+  assign show_image = section.settings.show_collection_image
+-%}
+
+{%- if show_description or show_image -%}
+  <section class="collection-banner section" data-section-id="{{ section.id }}">
+    <div class="container">
+      <div class="collection-banner__content">
+        <h1 class="collection-banner__title">{{ collection.title }}</h1>
+        
+        {%- if show_description and collection.description != blank -%}
+          <div class="collection-banner__description">
+            {{ collection.description }}
+          </div>
+        {%- endif -%}
+      </div>
+
+      {%- if show_image and collection.image -%}
+        <div class="collection-banner__image">
+          <img
+            srcset="{{ collection.image | image_url: width: 600 }} 600w,
+                    {{ collection.image | image_url: width: 1000 }} 1000w,
+                    {{ collection.image | image_url: width: 1400 }} 1400w"
+            src="{{ collection.image | image_url: width: 1000 }}"
+            alt="{{ collection.image.alt | default: collection.title | escape }}"
+            loading="eager"
+            width="{{ collection.image.width }}"
+            height="{{ collection.image.height }}"
+          >
+        </div>
+      {%- endif -%}
+    </div>
+  </section>
+{%- endif -%}
+
+<style>
+  .collection-banner {
+    text-align: center;
+  }
+
+  .collection-banner__title {
+    font-size: 2.5rem;
+    font-weight: 700;
+    margin-bottom: 1rem;
+  }
+
+  @media (min-width: 768px) {
+    .collection-banner__title {
+      font-size: 3.5rem;
+    }
+  }
+
+  .collection-banner__description {
+    max-width: 700px;
+    margin: 0 auto 2rem;
+    font-size: 1.125rem;
+    line-height: 1.7;
+    color: var(--color-text-secondary);
+  }
+
+  .collection-banner__image {
+    margin-top: 2rem;
+    max-height: 400px;
+    overflow: hidden;
+  }
+
+  .collection-banner__image img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+</style>
+
+{% schema %}
+{
+  "name": "Collection Banner",
+  "tag": "section",
+  "settings": [
+    {
+      "type": "checkbox",
+      "id": "show_collection_description",
+      "label": "Show collection description",
+      "default": true
+    },
+    {
+      "type": "checkbox",
+      "id": "show_collection_image",
+      "label": "Show collection image",
+      "default": true
+    }
+  ]
+}
+{% endschema %}

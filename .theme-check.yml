@@ -1,0 +1,20 @@
+# Theme Check Configuration
+# https://shopify.dev/themes/tools/theme-check
+
+# Ignore specific checks
+ignore:
+  - TemplateLength
+  - TranslationKeyExists
+
+# Custom severity levels
+DeprecatedTags: error
+MissingTemplate: error
+ParserBlockingJavaScript: warning
+RemoteAsset: error
+AssetSizeCSS: warning
+AssetSizeJavaScript: warning
+
+# Exclude paths
+exclude:
+  - node_modules/**
+  - .git/**

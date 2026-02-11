@@ -1,0 +1,206 @@
+{{ 'section-header.css' | asset_url | stylesheet_tag }}
+
+{%- liquid
+  assign logo = section.settings.logo
+  assign logo_width = section.settings.logo_width
+  assign menu = section.settings.menu
+  assign show_search = section.settings.show_search
+-%}
+
+<header class="header" data-section-id="{{ section.id }}" data-section-type="header">
+  <div class="container">
+    <div class="header__inner">
+      {%- comment -%} Mobile Menu Toggle {%- endcomment -%}
+      <button type="button" class="header__menu-toggle hide-desktop" aria-label="Open menu">
+        {% render 'icon', icon: 'menu' %}
+      </button>
+
+      {%- comment -%} Logo {%- endcomment -%}
+      <div class="header__logo">
+        <a href="{{ routes.root_url }}" class="header__logo-link">
+          {%- if logo -%}
+            <img
+              src="{{ logo | image_url: width: logo_width }}"
+              alt="{{ shop.name }}"
+              width="{{ logo_width }}"
+              height="{{ logo_width | divided_by: logo.aspect_ratio }}"
+              loading="eager"
+            >
+          {%- else -%}
+            <span class="header__logo-text">{{ shop.name }}</span>
+          {%- endif -%}
+        </a>
+      </div>
+
+      {%- comment -%} Navigation {%- endcomment -%}
+      <nav class="header__nav hide-mobile" aria-label="Primary navigation">
+        <ul class="header__nav-list">
+          {%- for link in linklists[menu].links -%}
+            <li class="header__nav-item">
+              <a href="{{ link.url }}" class="header__nav-link">
+                {{ link.title }}
+              </a>
+            </li>
+          {%- endfor -%}
+        </ul>
+      </nav>
+
+      {%- comment -%} Actions {%- endcomment -%}
+      <div class="header__actions">
+        {%- if show_search -%}
+          <button type="button" class="header__action" aria-label="Search">
+            {% render 'icon', icon: 'search' %}
+          </button>
+        {%- endif -%}
+
+        <a href="{{ routes.account_url }}" class="header__action hide-mobile" aria-label="Account">
+          <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" width="24" height="24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
+          </svg>
+        </a>
+
+        <button type="button" class="header__action header__cart" aria-label="Open cart" onclick="window.aurora.openCart()">
+          {% render 'icon', icon: 'cart' %}
+          <span class="header__cart-count" data-cart-count>0</span>
+        </button>
+      </div>
+    </div>
+  </div>
+</header>
+
+<style>
+  .header {
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    background-color: var(--color-neutral-light);
+    border-bottom: 1px solid var(--color-border);
+  }
+
+  .header__inner {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 1.5rem 0;
+    gap: 2rem;
+  }
+
+  .header__menu-toggle {
+    background: none;
+    border: none;
+    padding: 0.5rem;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+  }
+
+  .header__logo {
+    flex: 0 0 auto;
+  }
+
+  .header__logo-link {
+    display: block;
+  }
+
+  .header__logo-text {
+    font-family: var(--font-heading);
+    font-size: 1.5rem;
+    font-weight: 700;
+    letter-spacing: -0.02em;
+  }
+
+  .header__nav {
+    flex: 1 1 auto;
+  }
+
+  .header__nav-list {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 2.5rem;
+    list-style: none;
+    margin: 0;
+    padding: 0;
+  }
+
+  .header__nav-link {
+    font-size: 0.875rem;
+    font-weight: 500;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+    transition: opacity 0.2s ease;
+  }
+
+  .header__actions {
+    display: flex;
+    align-items: center;
+    gap: 1.5rem;
+  }
+
+  .header__action {
+    background: none;
+    border: none;
+    padding: 0.5rem;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    position: relative;
+  }
+
+  .header__cart-count {
+    position: absolute;
+    top: 0;
+    right: 0;
+    background-color: var(--color-primary);
+    color: var(--color-neutral-light);
+    font-size: 0.625rem;
+    font-weight: 700;
+    width: 18px;
+    height: 18px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  @media (min-width: 768px) {
+    .header__inner {
+      padding: 2rem 0;
+    }
+  }
+</style>
+
+{% schema %}
+{
+  "name": "Header",
+  "settings": [
+    {
+      "type": "image_picker",
+      "id": "logo",
+      "label": "Logo image"
+    },
+    {
+      "type": "range",
+      "id": "logo_width",
+      "min": 50,
+      "max": 250,
+      "step": 10,
+      "default": 120,
+      "unit": "px",
+      "label": "Logo width"
+    },
+    {
+      "type": "link_list",
+      "id": "menu",
+      "default": "main-menu",
+      "label": "Menu"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_search",
+      "default": true,
+      "label": "Show search"
+    }
+  ]
+}
+{% endschema %}

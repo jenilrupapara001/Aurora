@@ -1,0 +1,68 @@
+{
+    "current": {
+        "color_primary": "#1a1a1a",
+        "color_primary_hover": "#000000",
+        "color_neutral_light": "#ffffff",
+        "color_neutral_medium": "#f5f5f5",
+        "color_neutral_dark": "#1a1a1a",
+        "color_text_secondary": "#666666",
+        "color_highlight": "#ff6b6b",
+        "color_success": "#51cf66",
+        "color_border": "#e0e0e0",
+        "font_heading": "assistant_n4",
+        "font_body": "assistant_n4",
+        "font_size_base": 16,
+        "heading_scale": 1.25,
+        "layout_max_width": 1400,
+        "spacing_sections": 80,
+        "layout_style": "minimal",
+        "product_card_show_vendor": false,
+        "product_card_show_quick_add": true,
+        "product_card_hover_variant": true,
+        "product_card_badge_style": "minimal",
+        "smart_sorting_enabled": true,
+        "urgency_badges_enabled": true,
+        "low_stock_threshold": 5,
+        "ai_recommendations_enabled": true,
+        "lazy_load_images": true,
+        "preload_fonts": true,
+        "image_quality": "medium",
+        "cart_type": "drawer",
+        "cart_show_cross_sell": true,
+        "cart_free_shipping_threshold": "100",
+        "cart_show_urgency": true,
+        "mobile_sticky_buy_button": true,
+        "mobile_thumb_zone_nav": true,
+        "mobile_product_grid": "2",
+        "sections": {
+            "header": {
+                "type": "header",
+                "settings": {}
+            },
+            "footer": {
+                "type": "footer",
+                "settings": {}
+            }
+        }
+    },
+    "presets": {
+        "Luxury Minimal": {
+            "color_primary": "#1a1a1a",
+            "color_neutral_light": "#ffffff",
+            "layout_style": "minimal",
+            "product_card_badge_style": "minimal"
+        },
+        "Bold Streetwear": {
+            "color_primary": "#ff6b6b",
+            "color_neutral_light": "#f8f9fa",
+            "layout_style": "bold",
+            "product_card_badge_style": "bold"
+        },
+        "Editorial Fashion": {
+            "color_primary": "#2c2c2c",
+            "color_neutral_light": "#fafafa",
+            "layout_style": "editorial",
+            "product_card_badge_style": "pill"
+        }
+    }
+}

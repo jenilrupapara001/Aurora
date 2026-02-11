@@ -1,0 +1,268 @@
+{%- liquid
+  assign heading = section.settings.heading
+  assign subheading = section.settings.subheading
+  assign button_text = section.settings.button_text
+  assign button_link = section.settings.button_link
+  assign image = section.settings.image
+  assign image_mobile = section.settings.image_mobile
+  assign overlay_opacity = section.settings.overlay_opacity
+  assign text_alignment = section.settings.text_alignment
+  assign height = section.settings.height
+-%}
+
+<section class="hero hero--{{ height }}" data-section-id="{{ section.id }}">
+  <div class="hero__media">
+    {%- if image != blank -%}
+      <picture>
+        {%- if image_mobile != blank -%}
+          <source media="(max-width: 767px)" srcset="{{ image_mobile | image_url: width: 800 }}">
+        {%- endif -%}
+        <img
+          srcset="{{ image | image_url: width: 1200 }} 1200w,
+                  {{ image | image_url: width: 1600 }} 1600w,
+                  {{ image | image_url: width: 2000 }} 2000w"
+          src="{{ image | image_url: width: 1600 }}"
+          alt="{{ image.alt | escape }}"
+          class="hero__image"
+          loading="eager"
+          width="{{ image.width }}"
+          height="{{ image.height }}"
+        >
+      </picture>
+    {%- endif -%}
+    
+    {%- if overlay_opacity > 0 -%}
+      <div class="hero__overlay" style="opacity: {{ overlay_opacity | divided_by: 100.0 }}"></div>
+    {%- endif -%}
+  </div>
+
+  <div class="hero__content hero__content--{{ text_alignment }}">
+    <div class="container">
+      <div class="hero__text">
+        {%- if subheading != blank -%}
+          <p class="hero__subheading">{{ subheading }}</p>
+        {%- endif -%}
+        
+        {%- if heading != blank -%}
+          <h1 class="hero__heading">{{ heading }}</h1>
+        {%- endif -%}
+        
+        {%- if button_text != blank and button_link != blank -%}
+          <div class="hero__button">
+            <a href="{{ button_link }}" class="button">{{ button_text }}</a>
+          </div>
+        {%- endif -%}
+      </div>
+    </div>
+  </div>
+</section>
+
+<style>
+  .hero {
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+  }
+
+  .hero--small {
+    min-height: 400px;
+  }
+
+  .hero--medium {
+    min-height: 500px;
+  }
+
+  .hero--large {
+    min-height: 650px;
+  }
+
+  @media (min-width: 768px) {
+    .hero--small {
+      min-height: 500px;
+    }
+
+    .hero--medium {
+      min-height: 650px;
+    }
+
+    .hero--large {
+      min-height: 85vh;
+    }
+  }
+
+  .hero__media {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+  }
+
+  .hero__image {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+
+  .hero__overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: #000;
+  }
+
+  .hero__content {
+    position: relative;
+    z-index: 1;
+    width: 100%;
+    padding: 3rem 0;
+  }
+
+  .hero__content--left .hero__text {
+    text-align: left;
+    max-width: 600px;
+  }
+
+  .hero__content--center .hero__text {
+    text-align: center;
+    max-width: 800px;
+    margin-left: auto;
+    margin-right: auto;
+  }
+
+  .hero__content--right .hero__text {
+    text-align: right;
+    max-width: 600px;
+    margin-left: auto;
+  }
+
+  .hero__subheading {
+    font-size: 0.875rem;
+    font-weight: 600;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: white;
+    margin-bottom: 1rem;
+  }
+
+  .hero__heading {
+    font-size: 2.5rem;
+    font-weight: 700;
+    line-height: 1.1;
+    color: white;
+    margin-bottom: 2rem;
+    letter-spacing: -0.03em;
+  }
+
+  @media (min-width: 768px) {
+    .hero__heading {
+      font-size: 4rem;
+    }
+  }
+
+  .hero__button {
+    margin-top: 2rem;
+  }
+</style>
+
+{% schema %}
+{
+  "name": "Hero Banner",
+  "tag": "section",
+  "class": "section",
+  "settings": [
+    {
+      "type": "image_picker",
+      "id": "image",
+      "label": "Desktop Image"
+    },
+    {
+      "type": "image_picker",
+      "id": "image_mobile",
+      "label": "Mobile Image (optional)"
+    },
+    {
+      "type": "text",
+      "id": "subheading",
+      "label": "Subheading",
+      "default": "New Collection"
+    },
+    {
+      "type": "text",
+      "id": "heading",
+      "label": "Heading",
+      "default": "Elevate Your Style"
+    },
+    {
+      "type": "text",
+      "id": "button_text",
+      "label": "Button text",
+      "default": "Shop Now"
+    },
+    {
+      "type": "url",
+      "id": "button_link",
+      "label": "Button link"
+    },
+    {
+      "type": "select",
+      "id": "height",
+      "label": "Section height",
+      "options": [
+        {
+          "value": "small",
+          "label": "Small"
+        },
+        {
+          "value": "medium",
+          "label": "Medium"
+        },
+        {
+          "value": "large",
+          "label": "Large"
+        }
+      ],
+      "default": "large"
+    },
+    {
+      "type": "select",
+      "id": "text_alignment",
+      "label": "Text alignment",
+      "options": [
+        {
+          "value": "left",
+          "label": "Left"
+        },
+        {
+          "value": "center",
+          "label": "Center"
+        },
+        {
+          "value": "right",
+          "label": "Right"
+        }
+      ],
+      "default": "center"
+    },
+    {
+      "type": "range",
+      "id": "overlay_opacity",
+      "min": 0,
+      "max": 80,
+      "step": 10,
+      "unit": "%",
+      "label": "Image overlay opacity",
+      "default": 30
+    }
+  ],
+  "presets": [
+    {
+      "name": "Hero Banner"
+    }
+  ]
+}
+{% endschema %}

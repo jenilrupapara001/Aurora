@@ -1,0 +1,34 @@
+{%- comment -%}
+  Price Badge Component
+  Usage: {% render 'price-badge', product: product %}
+{%- endcomment -%}
+
+{%- liquid
+  assign compare_at_price = product.compare_at_price
+  assign price = product.price
+  assign available = product.available
+  assign money_price = price | money
+  if settings.currency_code_enabled
+    assign money_price = price | money_with_currency
+  endif
+
+  if compare_at_price > price
+    assign money_compare = compare_at_price | money
+    if settings.currency_code_enabled
+      assign money_compare = compare_at_price | money_with_currency
+    endif
+  endif
+-%}
+
+<div class="product-card__price">
+  {%- if available -%}
+    {%- if compare_at_price > price -%}
+      <span class="product-card__price--sale">{{ money_price }}</span>
+      <span class="product-card__price--compare">{{ money_compare }}</span>
+    {%- else -%}
+      <span>{{ money_price }}</span>
+    {%- endif -%}
+  {%- else -%}
+    <span class="product-card__price--sold-out">{{ 'products.product.sold_out' | t }}</span>
+  {%- endif -%}
+</div>

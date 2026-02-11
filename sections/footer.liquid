@@ -1,0 +1,255 @@
+{%- liquid
+  assign footer_menu = section.settings.footer_menu
+  assign show_social = section.settings.show_social
+  assign show_payment_icons = section.settings.show_payment_icons
+-%}
+
+<footer class="footer section" data-section-id="{{ section.id }}">
+  <div class="container">
+    <div class="footer__top">
+      <div class="footer__grid">
+        {%- comment -%} Brand Column {%- endcomment -%}
+        <div class="footer__column">
+          <h3 class="footer__heading">{{ shop.name }}</h3>
+          {%- if section.settings.footer_text != blank -%}
+            <p class="footer__text">{{ section.settings.footer_text }}</p>
+          {%- endif -%}
+        </div>
+
+        {%- comment -%} Navigation Columns {%- endcomment -%}
+        {%- for block in section.blocks -%}
+          {%- if block.type == 'menu' -%}
+            <div class="footer__column" {{ block.shopify_attributes }}>
+              <h4 class="footer__heading">{{ block.settings.title }}</h4>
+              <ul class="footer__menu">
+                {%- for link in linklists[block.settings.menu].links -%}
+                  <li>
+                    <a href="{{ link.url }}" class="footer__link">
+                      {{ link.title }}
+                    </a>
+                  </li>
+                {%- endfor -%}
+              </ul>
+            </div>
+          {%- endif -%}
+        {%- endfor -%}
+
+        {%- comment -%} Newsletter {%- endcomment -%}
+        <div class="footer__column">
+          <h4 class="footer__heading">{{ section.settings.newsletter_heading }}</h4>
+          <p class="footer__text">{{ section.settings.newsletter_text }}</p>
+          <form method="post" action="/contact#contact_form" class="footer__newsletter">
+            <input type="hidden" name="contact[tags]" value="newsletter">
+            <div class="footer__newsletter-input">
+              <input
+                type="email"
+                name="contact[email]"
+                placeholder="Email address"
+                class="form-input"
+                required
+              >
+              <button type="submit" class="button">Subscribe</button>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+
+    <div class="footer__bottom">
+      {%- if show_payment_icons -%}
+        <div class="footer__payment">
+          {%- for type in shop.enabled_payment_types -%}
+            {{ type | payment_type_svg_tag: class: 'footer__payment-icon' }}
+          {%- endfor -%}
+        </div>
+      {%- endif -%}
+
+      <div class="footer__copyright">
+        <p>&copy; {{ 'now' | date: '%Y' }} {{ shop.name }}. All rights reserved.</p>
+      </div>
+
+      {%- if show_social -%}
+        <div class="footer__social">
+          {%- if settings.social_instagram_link != blank -%}
+            <a href="{{ settings.social_instagram_link }}" target="_blank" rel="noopener" aria-label="Instagram">
+              <svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor">
+                <path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"/>
+              </svg>
+            </a>
+          {%- endif -%}
+        </div>
+      {%- endif -%}
+    </div>
+  </div>
+</footer>
+
+<style>
+  .footer {
+    background-color: var(--color-neutral-medium);
+    border-top: 1px solid var(--color-border);
+  }
+
+  .footer__grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 2rem;
+  }
+
+  @media (min-width: 768px) {
+    .footer__grid {
+      grid-template-columns: repeat(4, 1fr);
+      gap: 3rem;
+    }
+  }
+
+  .footer__heading {
+    font-size: 0.875rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    margin-bottom: 1rem;
+  }
+
+  .footer__text {
+    font-size: 0.875rem;
+    color: var(--color-text-secondary);
+    line-height: 1.6;
+  }
+
+  .footer__menu {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+  }
+
+  .footer__menu li {
+    margin-bottom: 0.75rem;
+  }
+
+  .footer__link {
+    font-size: 0.875rem;
+    color: var(--color-text-secondary);
+    transition: color 0.2s ease;
+  }
+
+  .footer__link:hover {
+    color: var(--color-neutral-dark);
+    opacity: 1;
+  }
+
+  .footer__newsletter-input {
+    display: flex;
+    gap: 0.5rem;
+    margin-top: 1rem;
+  }
+
+  .footer__newsletter-input .form-input {
+    flex: 1;
+  }
+
+  .footer__bottom {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 1.5rem;
+    margin-top: 3rem;
+    padding-top: 2rem;
+    border-top: 1px solid var(--color-border);
+  }
+
+  @media (min-width: 768px) {
+    .footer__bottom {
+      flex-direction: row;
+      justify-content: space-between;
+    }
+  }
+
+  .footer__payment {
+    display: flex;
+    gap: 0.5rem;
+    flex-wrap: wrap;
+  }
+
+  .footer__payment-icon {
+    height: 24px;
+    width: auto;
+  }
+
+  .footer__copyright {
+    font-size: 0.75rem;
+    color: var(--color-text-secondary);
+  }
+
+  .footer__social {
+    display: flex;
+    gap: 1rem;
+  }
+
+  .footer__social a {
+    color: var(--color-text-secondary);
+    transition: color 0.2s ease;
+  }
+
+  .footer__social a:hover {
+    color: var(--color-neutral-dark);
+    opacity: 1;
+  }
+</style>
+
+{% schema %}
+{
+  "name": "Footer",
+  "settings": [
+    {
+      "type": "text",
+      "id": "footer_text",
+      "label": "Brand description",
+      "default": "Premium fashion for the modern wardrobe."
+    },
+    {
+      "type": "text",
+      "id": "newsletter_heading",
+      "label": "Newsletter heading",
+      "default": "Stay Connected"
+    },
+    {
+      "type": "text",
+      "id": "newsletter_text",
+      "label": "Newsletter text",
+      "default": "Subscribe for exclusive offers and updates."
+    },
+    {
+      "type": "checkbox",
+      "id": "show_social",
+      "label": "Show social media icons",
+      "default": true
+    },
+    {
+      "type": "checkbox",
+      "id": "show_payment_icons",
+      "label": "Show payment icons",
+      "default": true
+    }
+  ],
+  "blocks": [
+    {
+      "type": "menu",
+      "name": "Menu",
+      "settings": [
+        {
+          "type": "text",
+          "id": "title",
+          "label": "Heading",
+          "default": "Quick Links"
+        },
+        {
+          "type": "link_list",
+          "id": "menu",
+          "label": "Menu",
+          "default": "footer"
+        }
+      ]
+    }
+  ]
+}
+{% endschema %}

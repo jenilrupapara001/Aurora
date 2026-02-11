@@ -1,0 +1,85 @@
+{
+    "general": {
+        "password_page": {
+            "powered_by_shopify_html": "This shop will be powered by {{ shopify }}"
+        },
+        "meta": {
+            "tags": "Tagged \"{{ tags }}\"",
+            "page": "Page {{ page }}"
+        },
+        "accessibility": {
+            "skip_to_text": "Skip to content",
+            "refresh_page": "Choosing a selection results in a full page refresh.",
+            "link_messages": {
+                "new_window": "Opens in a new window."
+            }
+        }
+    },
+    "sections": {
+        "cart": {
+            "cart_error": "There was an error while updating your cart. Please try again.",
+            "cart_quantity_error_html": "You can only add [quantity] of this item to your cart."
+        }
+    },
+    "products": {
+        "product": {
+            "add_to_cart": "Add to cart",
+            "sold_out": "Sold out",
+            "unavailable": "Unavailable",
+            "price": {
+                "from_price_html": "From {{ price }}",
+                "regular_price": "Regular price",
+                "sale_price": "Sale price"
+            },
+            "quantity": {
+                "label": "Quantity",
+                "increase": "Increase quantity",
+                "decrease": "Decrease quantity"
+            },
+            "media": {
+                "open_media": "Open media {{ index }} in modal",
+                "play_video": "Play video",
+                "play_model": "Play 3D Viewer"
+            }
+        }
+    },
+    "cart": {
+        "general": {
+            "title": "Your cart",
+            "remove": "Remove",
+            "subtotal": "Subtotal",
+            "taxes_and_shipping_at_checkout": "Taxes and shipping calculated at checkout",
+            "update": "Update",
+            "checkout": "Check out",
+            "empty": "Your cart is currently empty.",
+            "continue_shopping": "Continue shopping",
+            "close_cart": "Close cart"
+        }
+    },
+    "collections": {
+        "general": {
+            "no_matches": "Sorry, there are no products in this collection",
+            "items_with_count": {
+                "one": "{{ count }} item",
+                "other": "{{ count }} items"
+            }
+        },
+        "sorting": {
+            "title": "Sort by:",
+            "featured": "Featured",
+            "best_selling": "Best selling",
+            "alphabetically_a_z": "Alphabetically, A-Z",
+            "alphabetically_z_a": "Alphabetically, Z-A",
+            "price_low_to_high": "Price, low to high",
+            "price_high_to_low": "Price, high to low",
+            "date_new_to_old": "Date, new to old",
+            "date_old_to_new": "Date, old to new"
+        },
+        "filters": {
+            "title": "Filter:",
+            "clear_all": "Clear all",
+            "apply": "Apply",
+            "show_results": "Show results"
+        }
+    }
+}
