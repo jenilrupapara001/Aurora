@@ -1,0 +1,100 @@
+<nav class="breadcrumbs" role="navigation" aria-label="Breadcrumb">
+  <ol class="breadcrumbs__list">
+    <li class="breadcrumbs__item">
+      <a href="/" class="breadcrumbs__link">{{ 'general.breadcrumbs.home' | t }}</a>
+    </li>
+
+    {%- case template.name -%}
+      {%- when 'product' -%}
+        {%- if collection -%}
+          <li class="breadcrumbs__item">
+            <a href="{{ collection.url }}" class="breadcrumbs__link">{{ collection.title }}</a>
+          </li>
+        {%- elsif product.collections.size > 0 -%}
+          <li class="breadcrumbs__item">
+            <a href="{{ product.collections.first.url }}" class="breadcrumbs__link">
+              {{ product.collections.first.title }}
+            </a>
+          </li>
+        {%- endif -%}
+        <li class="breadcrumbs__item breadcrumbs__item--current">
+          <span>{{ product.title }}</span>
+        </li>
+
+      {%- when 'collection' -%}
+        <li class="breadcrumbs__item breadcrumbs__item--current">
+          <span>{{ collection.title }}</span>
+        </li>
+
+      {%- when 'blog' -%}
+        <li class="breadcrumbs__item breadcrumbs__item--current">
+          <span>{{ blog.title }}</span>
+        </li>
+
+      {%- when 'article' -%}
+        <li class="breadcrumbs__item">
+          <a href="{{ blog.url }}" class="breadcrumbs__link">{{ blog.title }}</a>
+        </li>
+        <li class="breadcrumbs__item breadcrumbs__item--current">
+          <span>{{ article.title }}</span>
+        </li>
+
+      {%- when 'page' -%}
+        <li class="breadcrumbs__item breadcrumbs__item--current">
+          <span>{{ page.title }}</span>
+        </li>
+
+      {%- when 'search' -%}
+        <li class="breadcrumbs__item breadcrumbs__item--current">
+          <span>{{ 'general.search.title' | t }}</span>
+        </li>
+
+      {%- when 'cart' -%}
+        <li class="breadcrumbs__item breadcrumbs__item--current">
+          <span>{{ 'cart.general.title' | t }}</span>
+        </li>
+    {%- endcase -%}
+  </ol>
+</nav>
+
+<style>
+  .breadcrumbs {
+    padding: 1rem 0;
+  }
+
+  .breadcrumbs__list {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 0.5rem;
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    font-size: 0.875rem;
+  }
+
+  .breadcrumbs__item {
+    display: flex;
+    align-items: center;
+  }
+
+  .breadcrumbs__item:not(:last-child)::after {
+    content: '/';
+    margin-left: 0.5rem;
+    color: var(--color-text-secondary);
+  }
+
+  .breadcrumbs__link {
+    color: var(--color-text-secondary);
+    text-decoration: none;
+    transition: color 0.2s ease;
+  }
+
+  .breadcrumbs__link:hover {
+    color: var(--color-primary);
+  }
+
+  .breadcrumbs__item--current span {
+    color: var(--color-neutral-dark);
+  }
+</style>

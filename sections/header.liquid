@@ -7,23 +7,22 @@
   assign show_search = section.settings.show_search
 -%}
 
-<header class="header" data-section-id="{{ section.id }}" data-section-type="header">
+<header class="header" data-section-id="{{ section.id }}">
   <div class="container">
     <div class="header__inner">
-      {%- comment -%} Mobile Menu Toggle {%- endcomment -%}
-      <button type="button" class="header__menu-toggle hide-desktop" aria-label="Open menu">
+      {%- comment -%} Mobile Menu Button {%- endcomment -%}
+      <button type="button" class="header__menu-toggle" data-mobile-menu-open aria-label="Open menu">
         {% render 'icon', icon: 'menu' %}
       </button>
 
       {%- comment -%} Logo {%- endcomment -%}
       <div class="header__logo">
-        <a href="{{ routes.root_url }}" class="header__logo-link">
-          {%- if logo -%}
+        <a href="{{ routes.root_url }}">
+          {%- if section.settings.logo != blank -%}
             <img
-              src="{{ logo | image_url: width: logo_width }}"
+              src="{{ section.settings.logo | image_url: width: section.settings.logo_width }}"
               alt="{{ shop.name }}"
-              width="{{ logo_width }}"
-              height="{{ logo_width | divided_by: logo.aspect_ratio }}"
+              width="{{ section.settings.logo_width }}"
               loading="eager"
             >
           {%- else -%}
@@ -86,9 +85,6 @@
   }
 
   .header__menu-toggle {
-    background: none;
-    border: none;
-    padding: 0.5rem;
     cursor: pointer;
     display: flex;
     align-items: center;

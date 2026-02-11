@@ -1,0 +1,239 @@
+{%- paginate search.results by 24 -%}
+  <section class="main-search section">
+    <div class="container">
+      {% render 'breadcrumbs' %}
+
+      <div class="search-header">
+        <h1 class="search-title">
+          {%- if search.performed -%}
+            {{ 'general.search.results_with_count' | t: count: search.results_count, terms: search.terms }}
+          {%- else -%}
+            {{ 'general.search.title' | t }}
+          {%- endif -%}
+        </h1>
+
+        <form action="{{ routes.search_url }}" method="get" role="search" class="search-form">
+          <input
+            type="search"
+            name="q"
+            value="{{ search.terms | escape }}"
+            placeholder="{{ 'general.search.placeholder' | t }}"
+            class="search-input"
+            aria-label="{{ 'general.search.placeholder' | t }}"
+          >
+          <button type="submit" class="search-submit">
+            {% render 'icon', icon: 'search' %}
+            <span class="visually-hidden">{{ 'general.search.submit' | t }}</span>
+          </button>
+        </form>
+      </div>
+
+      {%- if search.performed -%}
+        {%- if search.results_count > 0 -%}
+          <div class="search-results">
+            <div class="product-grid product-grid--4">
+              {%- for item in search.results -%}
+                {%- case item.object_type -%}
+                  {%- when 'product' -%}
+                    {% render 'product-card', product: item %}
+                  
+                  {%- when 'article' -%}
+                    <div class="search-result search-result--article">
+                      <a href="{{ item.url }}" class="search-result__link">
+                        {%- if item.image -%}
+                          <div class="search-result__image">
+                            <img
+                              src="{{ item.image | image_url: width: 400 }}"
+                              alt="{{ item.image.alt | escape }}"
+                              loading="lazy"
+                            >
+                          </div>
+                        {%- endif -%}
+                        <div class="search-result__content">
+                          <span class="search-result__type">{{ 'general.search.article' | t }}</span>
+                          <h3 class="search-result__title">{{ item.title }}</h3>
+                          {%- if item.excerpt != blank -%}
+                            <p class="search-result__excerpt">{{ item.excerpt | strip_html | truncate: 120 }}</p>
+                          {%- endif -%}
+                        </div>
+                      </a>
+                    </div>
+
+                  {%- when 'page' -%}
+                    <div class="search-result search-result--page">
+                      <a href="{{ item.url }}" class="search-result__link">
+                        <div class="search-result__content">
+                          <span class="search-result__type">{{ 'general.search.page' | t }}</span>
+                          <h3 class="search-result__title">{{ item.title }}</h3>
+                          {%- if item.content != blank -%}
+                            <p class="search-result__excerpt">{{ item.content | strip_html | truncate: 120 }}</p>
+                          {%- endif -%}
+                        </div>
+                      </a>
+                    </div>
+                {%- endcase -%}
+              {%- endfor -%}
+            </div>
+
+            {% render 'pagination', paginate: paginate %}
+          </div>
+        {%- else -%}
+          <div class="search-empty">
+            <p class="search-empty__text">{{ 'general.search.no_results' | t: terms: search.terms }}</p>
+            <a href="/collections/all" class="button">{{ 'general.search.browse_products' | t }}</a>
+          </div>
+        {%- endif -%}
+      {%- else -%}
+        <div class="search-suggestions">
+          <h2>{{ 'general.search.popular_searches' | t }}</h2>
+          <ul class="search-suggestions__list">
+            <li><a href="/search?q=shirts">Shirts</a></li>
+            <li><a href="/search?q=jeans">Jeans</a></li>
+            <li><a href="/search?q=jackets">Jackets</a></li>
+            <li><a href="/search?q=accessories">Accessories</a></li>
+          </ul>
+        </div>
+      {%- endif -%}
+    </div>
+  </section>
+{%- endpaginate -%}
+
+<style>
+  .search-header {
+    text-align: center;
+    margin-bottom: 3rem;
+  }
+
+  .search-title {
+    font-size: 2.5rem;
+    margin-bottom: 2rem;
+  }
+
+  .search-form {
+    display: flex;
+    max-width: 600px;
+    margin: 0 auto;
+    border: 2px solid var(--color-border);
+  }
+
+  .search-input {
+    flex: 1;
+    padding: 1rem 1.5rem;
+    border: none;
+    font-size: 1rem;
+  }
+
+  .search-input:focus {
+    outline: none;
+  }
+
+  .search-submit {
+    padding: 1rem 1.5rem;
+    background-color: var(--color-primary);
+    color: var(--color-neutral-light);
+    border: none;
+    cursor: pointer;
+    transition: background-color 0.2s ease;
+  }
+
+  .search-submit:hover {
+    background-color: var(--color-primary-hover);
+  }
+
+  .search-submit svg {
+    width: 20px;
+    height: 20px;
+  }
+
+  .search-result {
+    border: 1px solid var(--color-border);
+    padding: 1.5rem;
+  }
+
+  .search-result__link {
+    text-decoration: none;
+    color: inherit;
+  }
+
+  .search-result__image {
+    aspect-ratio: 16 / 9;
+    margin-bottom: 1rem;
+    overflow: hidden;
+  }
+
+  .search-result__image img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+
+  .search-result__type {
+    font-size: 0.75rem;
+    color: var(--color-text-secondary);
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    font-weight: 600;
+  }
+
+  .search-result__title {
+    font-size: 1.25rem;
+    margin: 0.5rem 0;
+  }
+
+  .search-result__excerpt {
+    color: var(--color-text-secondary);
+    line-height: 1.6;
+  }
+
+  .search-empty {
+    text-align: center;
+    padding: 4rem 0;
+  }
+
+  .search-empty__text {
+    font-size: 1.25rem;
+    color: var(--color-text-secondary);
+    margin-bottom: 2rem;
+  }
+
+  .search-suggestions {
+    text-align: center;
+    padding: 2rem 0;
+  }
+
+  .search-suggestions h2 {
+    font-size: 1.5rem;
+    margin-bottom: 1.5rem;
+  }
+
+  .search-suggestions__list {
+    display: flex;
+    justify-content: center;
+    flex-wrap: wrap;
+    gap: 1rem;
+    list-style: none;
+    padding: 0;
+  }
+
+  .search-suggestions__list a {
+    padding: 0.75rem 1.5rem;
+    border: 2px solid var(--color-border);
+    text-decoration: none;
+    color: var(--color-neutral-dark);
+    font-weight: 500;
+    transition: all 0.2s ease;
+  }
+
+  .search-suggestions__list a:hover {
+    border-color: var(--color-primary);
+    background-color: var(--color-primary);
+    color: var(--color-neutral-light);
+  }
+</style>
+
+{% schema %}
+{
+  "name": "Search Results",
+  "settings": []
+}
+{% endschema %}

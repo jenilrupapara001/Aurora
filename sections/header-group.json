@@ -2,6 +2,13 @@
     "name": "Header",
     "type": "header",
     "sections": {
+        "announcement-bar": {
+            "type": "announcement-bar",
+            "settings": {
+                "show_announcement": true,
+                "announcement_text": "Free shipping on orders over $50"
+            }
+        },
         "header": {
             "type": "header",
             "settings": {
@@ -9,9 +16,17 @@
                 "menu": "main-menu",
                 "show_search": true
             }
+        },
+        "mobile-menu": {
+            "type": "mobile-menu",
+            "settings": {
+                "menu": "main-menu"
+            }
         }
     },
     "order": [
-        "header"
+        "announcement-bar",
+        "header",
+        "mobile-menu"
     ]
 }

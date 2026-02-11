@@ -1,0 +1,189 @@
+<section class="promo-grid section">
+  <div class="container">
+    {%- if section.settings.heading != blank -%}
+      <h2 class="promo-grid__heading">{{ section.settings.heading }}</h2>
+    {%- endif -%}
+
+    <div class="promo-grid__items promo-grid__items--{{ section.settings.columns }}">
+      {%- for block in section.blocks -%}
+        <div class="promo-card" {{ block.shopify_attributes }}>
+          {%- if block.settings.image != blank -%}
+            <div class="promo-card__image">
+              <img
+                src="{{ block.settings.image | image_url: width: 600 }}"
+                alt="{{ block.settings.image.alt | escape }}"
+                loading="lazy"
+              >
+            </div>
+          {%- endif -%}
+
+          <div class="promo-card__content">
+            {%- if block.settings.heading != blank -%}
+              <h3 class="promo-card__title">{{ block.settings.heading }}</h3>
+            {%- endif -%}
+
+            {%- if block.settings.text != blank -%}
+              <p class="promo-card__text">{{ block.settings.text }}</p>
+            {%- endif -%}
+
+            {%- if block.settings.button_label != blank and block.settings.button_link != blank -%}
+              <a href="{{ block.settings.button_link }}" class="promo-card__button button">
+                {{ block.settings.button_label }}
+              </a>
+            {%- endif -%}
+          </div>
+        </div>
+      {%- endfor -%}
+    </div>
+  </div>
+</section>
+
+<style>
+  .promo-grid__heading {
+    text-align: center;
+    font-size: 2.5rem;
+    margin-bottom: 3rem;
+  }
+
+  .promo-grid__items {
+    display: grid;
+    gap: 2rem;
+  }
+
+  .promo-grid__items--2 {
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  }
+
+  .promo-grid__items--3 {
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  }
+
+  .promo-grid__items--4 {
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  }
+
+  .promo-card {
+    position: relative;
+    overflow: hidden;
+    text-align: center;
+  }
+
+  .promo-card__image {
+    aspect-ratio: 4 / 5;
+    overflow: hidden;
+    margin-bottom: 1.5rem;
+  }
+
+  .promo-card__image img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform 0.3s ease;
+  }
+
+  .promo-card:hover .promo-card__image img {
+    transform: scale(1.05);
+  }
+
+  .promo-card__title {
+    font-size: 1.5rem;
+    margin-bottom: 1rem;
+  }
+
+  .promo-card__text {
+    color: var(--color-text-secondary);
+    margin-bottom: 1.5rem;
+    line-height: 1.6;
+  }
+
+  @media (max-width: 767px) {
+    .promo-grid__items {
+      grid-template-columns: 1fr;
+    }
+  }
+</style>
+
+{% schema %}
+{
+  "name": "Promotion Grid",
+  "settings": [
+    {
+      "type": "text",
+      "id": "heading",
+      "label": "Heading"
+    },
+    {
+      "type": "select",
+      "id": "columns",
+      "label": "Columns per row",
+      "options": [
+        {
+          "value": "2",
+          "label": "2"
+        },
+        {
+          "value": "3",
+          "label": "3"
+        },
+        {
+          "value": "4",
+          "label": "4"
+        }
+      ],
+      "default": "3"
+    }
+  ],
+  "blocks": [
+    {
+      "type": "promo",
+      "name": "Promotion",
+      "settings": [
+        {
+          "type": "image_picker",
+          "id": "image",
+          "label": "Image"
+        },
+        {
+          "type": "text",
+          "id": "heading",
+          "label": "Heading",
+          "default": "Promotion"
+        },
+        {
+          "type": "textarea",
+          "id": "text",
+          "label": "Text",
+          "default": "Describe your promotion"
+        },
+        {
+          "type": "text",
+          "id": "button_label",
+          "label": "Button label",
+          "default": "Shop now"
+        },
+        {
+          "type": "url",
+          "id": "button_link",
+          "label": "Button link"
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Promotion Grid",
+      "blocks": [
+        {
+          "type": "promo"
+        },
+        {
+          "type": "promo"
+        },
+        {
+          "type": "promo"
+        }
+      ]
+    }
+  ]
+}
+{% endschema %}

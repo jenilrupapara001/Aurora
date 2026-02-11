@@ -1,0 +1,276 @@
+<div class="mobile-menu" data-mobile-menu>
+  <div class="mobile-menu__overlay" data-mobile-menu-close></div>
+  
+  <div class="mobile-menu__drawer">
+    <div class="mobile-menu__header">
+      <button type="button" class="mobile-menu__close" data-mobile-menu-close aria-label="Close menu">
+        {% render 'icon', icon: 'close' %}
+      </button>
+    </div>
+
+    <nav class="mobile-menu__nav" role="navigation">
+      {%- if section.settings.menu != blank -%}
+        <ul class="mobile-menu__list">
+          {%- for link in linklists[section.settings.menu].links -%}
+            <li class="mobile-menu__item">
+              {%- if link.links != blank -%}
+                <details class="mobile-menu__details">
+                  <summary class="mobile-menu__summary">
+                    {{ link.title }}
+                    {% render 'icon', icon: 'chevron-down' %}
+                  </summary>
+                  <ul class="mobile-menu__submenu">
+                    {%- for child_link in link.links -%}
+                      <li class="mobile-menu__submenu-item">
+                        <a href="{{ child_link.url }}" class="mobile-menu__link">
+                          {{ child_link.title }}
+                        </a>
+                      </li>
+                    {%- endfor -%}
+                  </ul>
+                </details>
+              {%- else -%}
+                <a href="{{ link.url }}" class="mobile-menu__link">
+                  {{ link.title }}
+                </a>
+              {%- endif -%}
+            </li>
+          {%- endfor -%}
+        </ul>
+      {%- endif -%}
+    </nav>
+
+    <div class="mobile-menu__footer">
+      {%- if shop.customer_accounts_enabled -%}
+        <a href="{{ routes.account_url }}" class="mobile-menu__account">
+          {% render 'icon', icon: 'account' %}
+          <span>{{ 'customer.account.title' | t }}</span>
+        </a>
+      {%- endif -%}
+    </div>
+  </div>
+</div>
+
+<style>
+  .mobile-menu {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 9999;
+    pointer-events: none;
+  }
+
+  .mobile-menu.active {
+    pointer-events: auto;
+  }
+
+  .mobile-menu__overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0);
+    transition: background-color 0.3s ease;
+  }
+
+  .mobile-menu.active .mobile-menu__overlay {
+    background-color: rgba(0, 0, 0, 0.5);
+  }
+
+  .mobile-menu__drawer {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 85%;
+    max-width: 400px;
+    height: 100%;
+    background-color: var(--color-neutral-light);
+    transform: translateX(-100%);
+    transition: transform 0.3s ease;
+    overflow-y: auto;
+    display: flex;
+    flex-direction: column;
+  }
+
+  .mobile-menu.active .mobile-menu__drawer {
+    transform: translateX(0);
+  }
+
+  .mobile-menu__header {
+    display: flex;
+    justify-content: flex-end;
+    padding: 1rem;
+    border-bottom: 1px solid var(--color-border);
+  }
+
+  .mobile-menu__close {
+    background: none;
+    border: none;
+    padding: 0.5rem;
+    cursor: pointer;
+  }
+
+  .mobile-menu__close svg {
+    width: 24px;
+    height: 24px;
+  }
+
+  .mobile-menu__nav {
+    flex: 1;
+    overflow-y: auto;
+  }
+
+  .mobile-menu__list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+  }
+
+  .mobile-menu__item {
+    border-bottom: 1px solid var(--color-border);
+  }
+
+  .mobile-menu__link {
+    display: block;
+    padding: 1rem 1.5rem;
+    font-size: 1rem;
+    font-weight: 500;
+    color: var(--color-neutral-dark);
+    text-decoration: none;
+  }
+
+  .mobile-menu__details summary {
+    list-style: none;
+    cursor: pointer;
+  }
+
+  .mobile-menu__details summary::-webkit-details-marker {
+    display: none;
+  }
+
+  .mobile-menu__summary {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 1rem 1.5rem;
+    font-size: 1rem;
+    font-weight: 500;
+  }
+
+  .mobile-menu__summary svg {
+    width: 16px;
+    height: 16px;
+    transition: transform 0.2s ease;
+  }
+
+  .mobile-menu__details[open] .mobile-menu__summary svg {
+    transform: rotate(180deg);
+  }
+
+  .mobile-menu__submenu {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    background-color: var(--color-neutral-medium);
+  }
+
+  .mobile-menu__submenu-item {
+    border-bottom: 1px solid var(--color-border);
+  }
+
+  .mobile-menu__submenu-item:last-child {
+    border-bottom: none;
+  }
+
+  .mobile-menu__submenu .mobile-menu__link {
+    padding-left: 2.5rem;
+    font-size: 0.9375rem;
+  }
+
+  .mobile-menu__footer {
+    padding: 1.5rem;
+    border-top: 1px solid var(--color-border);
+  }
+
+  .mobile-menu__account {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    font-weight: 500;
+    color: var(--color-neutral-dark);
+    text-decoration: none;
+  }
+
+  .mobile-menu__account svg {
+    width: 20px;
+    height: 20px;
+  }
+
+  @media (min-width: 768px) {
+    .mobile-menu {
+      display: none;
+    }
+  }
+</style>
+
+<script>
+  class MobileMenu {
+    constructor() {
+      this.menu = document.querySelector('[data-mobile-menu]');
+      this.openButtons = document.querySelectorAll('[data-mobile-menu-open]');
+      this.closeButtons = document.querySelectorAll('[data-mobile-menu-close]');
+      
+      this.init();
+    }
+
+    init() {
+      this.openButtons.forEach(button => {
+        button.addEventListener('click', () => this.open());
+      });
+
+      this.closeButtons.forEach(button => {
+        button.addEventListener('click', () => this.close());
+      });
+
+      // Close on escape key
+      document.addEventListener('keydown', (e) => {
+        if (e.key === 'Escape' && this.menu.classList.contains('active')) {
+          this.close();
+        }
+      });
+    }
+
+    open() {
+      this.menu.classList.add('active');
+      document.body.style.overflow = 'hidden';
+    }
+
+    close() {
+      this.menu.classList.remove('active');
+      document.body.style.overflow = '';
+    }
+  }
+
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', () => new MobileMenu());
+  } else {
+    new MobileMenu();
+  }
+</script>
+
+{% schema %}
+{
+  "name": "Mobile Menu",
+  "settings": [
+    {
+      "type": "link_list",
+      "id": "menu",
+      "label": "Menu",
+      "default": "main-menu"
+    }
+  ]
+}
+{% endschema %}

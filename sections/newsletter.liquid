@@ -1,0 +1,229 @@
+<section class="newsletter section" style="background-color: {{ section.settings.background_color }}; color: {{ section.settings.text_color }};">
+  <div class="container">
+    <div class="newsletter__content">
+      {%- if section.settings.heading != blank -%}
+        <h2 class="newsletter__heading">{{ section.settings.heading }}</h2>
+      {%- endif -%}
+      
+      {%- if section.settings.text != blank -%}
+        <p class="newsletter__text">{{ section.settings.text }}</p>
+      {%- endif -%}
+
+      <form action="{{ routes.root_url }}contact#newsletter" method="post" class="newsletter__form" data-newsletter-form>
+        <input type="hidden" name="contact[tags]" value="newsletter">
+        
+        <div class="newsletter__input-wrapper">
+          <input
+            type="email"
+            name="contact[email]"
+            placeholder="{{ section.settings.placeholder }}"
+            class="newsletter__input"
+            aria-label="{{ section.settings.placeholder }}"
+            required
+          >
+          <button type="submit" class="newsletter__submit button">
+            {{ section.settings.button_text }}
+          </button>
+        </div>
+
+        <div class="newsletter__message" data-newsletter-message></div>
+      </form>
+
+      {%- if section.settings.show_privacy -%}
+        <p class="newsletter__privacy">{{ section.settings.privacy_text }}</p>
+      {%- endif -%}
+    </div>
+  </div>
+</section>
+
+<style>
+  .newsletter {
+    padding: 4rem 0;
+  }
+
+  .newsletter__content {
+    max-width: 600px;
+    margin: 0 auto;
+    text-align: center;
+  }
+
+  .newsletter__heading {
+    font-size: 2rem;
+    margin-bottom: 1rem;
+  }
+
+  .newsletter__text {
+    font-size: 1.125rem;
+    margin-bottom: 2rem;
+    opacity: 0.9;
+  }
+
+  .newsletter__input-wrapper {
+    display: flex;
+    gap: 0.5rem;
+    margin-bottom: 1rem;
+  }
+
+  .newsletter__input {
+    flex: 1;
+    padding: 1rem 1.5rem;
+    border: 2px solid currentColor;
+    background-color: transparent;
+    color: inherit;
+    font-size: 1rem;
+  }
+
+  .newsletter__input::placeholder {
+    color: inherit;
+    opacity: 0.6;
+  }
+
+  .newsletter__input:focus {
+    outline: none;
+    border-color: currentColor;
+  }
+
+  .newsletter__submit {
+    padding: 1rem 2rem;
+    white-space: nowrap;
+  }
+
+  .newsletter__message {
+    font-size: 0.875rem;
+    margin-top: 1rem;
+    min-height: 1.5rem;
+  }
+
+  .newsletter__message.success {
+    color: var(--color-success);
+  }
+
+  .newsletter__message.error {
+    color: var(--color-highlight);
+  }
+
+  .newsletter__privacy {
+    font-size: 0.75rem;
+    margin-top: 1.5rem;
+    opacity: 0.7;
+  }
+
+  @media (max-width: 767px) {
+    .newsletter__input-wrapper {
+      flex-direction: column;
+    }
+
+    .newsletter__submit {
+      width: 100%;
+    }
+  }
+</style>
+
+<script>
+  const form = document.querySelector('[data-newsletter-form]');
+  const message = document.querySelector('[data-newsletter-message]');
+
+  if (form) {
+    form.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      
+      const formData = new FormData(form);
+      
+      try {
+        const response = await fetch(form.action, {
+          method: 'POST',
+          body: formData,
+          headers: {
+            'Accept': 'application/json'
+          }
+        });
+
+        if (response.ok) {
+          message.textContent = '{{ section.settings.success_message }}';
+          message.classList.add('success');
+          message.classList.remove('error');
+          form.reset();
+        } else {
+          throw new Error('Subscription failed');
+        }
+      } catch (error) {
+        message.textContent = '{{ section.settings.error_message }}';
+        message.classList.add('error');
+        message.classList.remove('success');
+      }
+    });
+  }
+</script>
+
+{% schema %}
+{
+  "name": "Newsletter",
+  "settings": [
+    {
+      "type": "text",
+      "id": "heading",
+      "label": "Heading",
+      "default": "Stay in the loop"
+    },
+    {
+      "type": "textarea",
+      "id": "text",
+      "label": "Text",
+      "default": "Subscribe to our newsletter for exclusive offers and updates."
+    },
+    {
+      "type": "text",
+      "id": "placeholder",
+      "label": "Email placeholder",
+      "default": "Enter your email"
+    },
+    {
+      "type": "text",
+      "id": "button_text",
+      "label": "Button text",
+      "default": "Subscribe"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_privacy",
+      "label": "Show privacy text",
+      "default": true
+    },
+    {
+      "type": "text",
+      "id": "privacy_text",
+      "label": "Privacy text",
+      "default": "We respect your privacy. Unsubscribe at any time."
+    },
+    {
+      "type": "text",
+      "id": "success_message",
+      "label": "Success message",
+      "default": "Thanks for subscribing!"
+    },
+    {
+      "type": "text",
+      "id": "error_message",
+      "label": "Error message",
+      "default": "Something went wrong. Please try again."
+    },
+    {
+      "type": "color",
+      "id": "background_color",
+      "label": "Background color",
+      "default": "#000000"
+    },
+    {
+      "type": "color",
+      "id": "text_color",
+      "label": "Text color",
+      "default": "#ffffff"
+    }
+  ],
+  "presets": [
+    {
+      "name": "Newsletter"
+    }
+  ]
+}
+{% endschema %}

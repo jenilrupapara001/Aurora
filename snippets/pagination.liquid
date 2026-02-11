@@ -1,0 +1,110 @@
+{%- if paginate.pages > 1 -%}
+  <nav class="pagination" role="navigation" aria-label="Pagination">
+    <ul class="pagination__list">
+      {%- if paginate.previous -%}
+        <li class="pagination__item">
+          <a href="{{ paginate.previous.url }}" class="pagination__link pagination__link--prev" aria-label="Previous page">
+            {% render 'icon', icon: 'chevron-left' %}
+            <span>{{ 'general.pagination.previous' | t }}</span>
+          </a>
+        </li>
+      {%- endif -%}
+
+      {%- for part in paginate.parts -%}
+        {%- if part.is_link -%}
+          <li class="pagination__item">
+            <a href="{{ part.url }}" class="pagination__link" aria-label="Page {{ part.title }}">
+              {{ part.title }}
+            </a>
+          </li>
+        {%- else -%}
+          {%- if part.title == paginate.current_page -%}
+            <li class="pagination__item">
+              <span class="pagination__link pagination__link--current" aria-current="page" aria-label="Page {{ part.title }}">
+                {{ part.title }}
+              </span>
+            </li>
+          {%- else -%}
+            <li class="pagination__item">
+              <span class="pagination__ellipsis">{{ part.title }}</span>
+            </li>
+          {%- endif -%}
+        {%- endif -%}
+      {%- endfor -%}
+
+      {%- if paginate.next -%}
+        <li class="pagination__item">
+          <a href="{{ paginate.next.url }}" class="pagination__link pagination__link--next" aria-label="Next page">
+            <span>{{ 'general.pagination.next' | t }}</span>
+            {% render 'icon', icon: 'chevron-right' %}
+          </a>
+        </li>
+      {%- endif -%}
+    </ul>
+  </nav>
+{%- endif -%}
+
+<style>
+  .pagination {
+    margin: 3rem 0;
+  }
+
+  .pagination__list {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 0.5rem;
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    flex-wrap: wrap;
+  }
+
+  .pagination__link {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.75rem 1rem;
+    border: 2px solid var(--color-border);
+    color: var(--color-neutral-dark);
+    text-decoration: none;
+    font-weight: 500;
+    transition: all 0.2s ease;
+    min-width: 44px;
+    justify-content: center;
+  }
+
+  .pagination__link:hover {
+    border-color: var(--color-primary);
+    background-color: var(--color-primary);
+    color: var(--color-neutral-light);
+  }
+
+  .pagination__link--current {
+    border-color: var(--color-primary);
+    background-color: var(--color-primary);
+    color: var(--color-neutral-light);
+    cursor: default;
+  }
+
+  .pagination__link svg {
+    width: 16px;
+    height: 16px;
+  }
+
+  .pagination__ellipsis {
+    padding: 0.75rem 0.5rem;
+    color: var(--color-text-secondary);
+  }
+
+  @media (max-width: 767px) {
+    .pagination__link span {
+      display: none;
+    }
+
+    .pagination__link--prev,
+    .pagination__link--next {
+      padding: 0.75rem;
+    }
+  }
+</style>
