@@ -1,0 +1,210 @@
+<section class="social-proof section">
+  <div class="container">
+    {%- if section.settings.heading != blank -%}
+      <h2 class="social-proof__heading">{{ section.settings.heading }}</h2>
+    {%- endif -%}
+
+    <div class="social-proof-grid">
+      {%- for block in section.blocks -%}
+        <div class="social-proof-item" {{ block.shopify_attributes }}>
+          <div class="social-proof-item__icon">
+            {%- case block.type -%}
+              {%- when 'reviews' -%}
+                <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/>
+                </svg>
+              {%- when 'customers' -%}
+                <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/>
+                  <circle cx="9" cy="7" r="4"/>
+                  <path d="M23 21v-2a4 4 0 0 0-3-3.87"/>
+                  <path d="M16 3.13a4 4 0 0 1 0 7.75"/>
+                </svg>
+              {%- when 'shipping' -%}
+                <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <rect x="1" y="3" width="15" height="13"/>
+                  <polygon points="16 8 20 8 23 11 23 16 16 16 16 8"/>
+                  <circle cx="5.5" cy="18.5" r="2.5"/>
+                  <circle cx="18.5" cy="18.5" r="2.5"/>
+                </svg>
+              {%- when 'guarantee' -%}
+                <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
+                  <path d="M9 12l2 2 4-4"/>
+                </svg>
+            {%- endcase -%}
+          </div>
+
+          <div class="social-proof-item__content">
+            {%- if block.settings.stat != blank -%}
+              <p class="social-proof-item__stat">{{ block.settings.stat }}</p>
+            {%- endif -%}
+
+            {%- if block.settings.label != blank -%}
+              <p class="social-proof-item__label">{{ block.settings.label }}</p>
+            {%- endif -%}
+          </div>
+        </div>
+      {%- endfor -%}
+    </div>
+  </div>
+</section>
+
+<style>
+  .social-proof {
+    background-color: {{ section.settings.background_color }};
+    padding: 3rem 0;
+  }
+
+  .social-proof__heading {
+    text-align: center;
+    font-size: 2rem;
+    margin-bottom: 3rem;
+  }
+
+  .social-proof-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 3rem;
+  }
+
+  .social-proof-item {
+    text-align: center;
+  }
+
+  .social-proof-item__icon {
+    color: var(--color-primary);
+    margin-bottom: 1.5rem;
+  }
+
+  .social-proof-item__stat {
+    font-size: 2.5rem;
+    font-weight: 700;
+    margin-bottom: 0.5rem;
+    color: var(--color-neutral-dark);
+  }
+
+  .social-proof-item__label {
+    font-size: 1rem;
+    color: var(--color-text-secondary);
+  }
+
+  @media (max-width: 767px) {
+    .social-proof-grid {
+      grid-template-columns: repeat(2, 1fr);
+      gap: 2rem;
+    }
+  }
+</style>
+
+{% schema %}
+{
+  "name": "Social Proof",
+  "settings": [
+    {
+      "type": "text",
+      "id": "heading",
+      "label": "Heading"
+    },
+    {
+      "type": "color",
+      "id": "background_color",
+      "label": "Background color",
+      "default": "#ffffff"
+    }
+  ],
+  "blocks": [
+    {
+      "type": "reviews",
+      "name": "Reviews Stat",
+      "settings": [
+        {
+          "type": "text",
+          "id": "stat",
+          "label": "Statistic",
+          "default": "10,000+"
+        },
+        {
+          "type": "text",
+          "id": "label",
+          "label": "Label",
+          "default": "5-Star Reviews"
+        }
+      ]
+    },
+    {
+      "type": "customers",
+      "name": "Customers Stat",
+      "settings": [
+        {
+          "type": "text",
+          "id": "stat",
+          "label": "Statistic",
+          "default": "50,000+"
+        },
+        {
+          "type": "text",
+          "id": "label",
+          "label": "Label",
+          "default": "Happy Customers"
+        }
+      ]
+    },
+    {
+      "type": "shipping",
+      "name": "Shipping Stat",
+      "settings": [
+        {
+          "type": "text",
+          "id": "stat",
+          "label": "Statistic",
+          "default": "Free"
+        },
+        {
+          "type": "text",
+          "id": "label",
+          "label": "Label",
+          "default": "Shipping Over $50"
+        }
+      ]
+    },
+    {
+      "type": "guarantee",
+      "name": "Guarantee Stat",
+      "settings": [
+        {
+          "type": "text",
+          "id": "stat",
+          "label": "Statistic",
+          "default": "30 Days"
+        },
+        {
+          "type": "text",
+          "id": "label",
+          "label": "Label",
+          "default": "Money-Back Guarantee"
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Social Proof",
+      "blocks": [
+        {
+          "type": "reviews"
+        },
+        {
+          "type": "customers"
+        },
+        {
+          "type": "shipping"
+        },
+        {
+          "type": "guarantee"
+        }
+      ]
+    }
+  ]
+}
+{% endschema %}

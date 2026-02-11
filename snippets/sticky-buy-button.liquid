@@ -1,0 +1,125 @@
+<div class="sticky-buy-button" data-sticky-buy-button>
+  <div class="sticky-buy-button__content">
+    <div class="sticky-buy-button__info">
+      <span class="sticky-buy-button__price" data-sticky-price></span>
+    </div>
+    <button type="button" class="sticky-buy-button__btn button" data-sticky-add-to-cart>
+      {{ 'products.product.add_to_cart' | t }}
+    </button>
+  </div>
+</div>
+
+<style>
+  .sticky-buy-button {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    background-color: var(--color-neutral-light);
+    border-top: 1px solid var(--color-border);
+    padding: 1rem;
+    z-index: 999;
+    transform: translateY(100%);
+    transition: transform 0.3s ease;
+    box-shadow: 0 -2px 10px rgba(0,0,0,0.1);
+  }
+
+  .sticky-buy-button.visible {
+    transform: translateY(0);
+  }
+
+  .sticky-buy-button__content {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1rem;
+    max-width: 100%;
+    margin: 0 auto;
+  }
+
+  .sticky-buy-button__info {
+    display: flex;
+    flex-direction: column;
+  }
+
+  .sticky-buy-button__price {
+    font-size: 1.25rem;
+    font-weight: 600;
+  }
+
+  .sticky-buy-button__btn {
+    flex-shrink: 0;
+    min-width: 150px;
+  }
+
+  @media (min-width: 768px) {
+    .sticky-buy-button {
+      display: none;
+    }
+  }
+</style>
+
+<script>
+  class StickyBuyButton {
+    constructor() {
+      this.button = document.querySelector('[data-sticky-buy-button]');
+      if (!this.button) return;
+
+      this.priceElement = document.querySelector('[data-sticky-price]');
+      this.addToCartBtn = document.querySelector('[data-sticky-add-to-cart]');
+      this.mainAddToCart = document.querySelector('[data-product-form] button[type="submit"]');
+      this.mainPrice = document.querySelector('[data-product-price]');
+      
+      this.init();
+    }
+
+    init() {
+      // Show/hide on scroll
+      let lastScroll = 0;
+      const observer = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+          if (!entry.isIntersecting) {
+            this.button.classList.add('visible');
+          } else {
+            this.button.classList.remove('visible');
+          }
+        });
+      }, { threshold: 0 });
+
+      const productForm = document.querySelector('[data-product-form]');
+      if (productForm) {
+        observer.observe(productForm);
+      }
+
+      // Sync price
+      if (this.mainPrice && this.priceElement) {
+        this.priceElement.textContent = this.mainPrice.textContent;
+        
+        const priceObserver = new MutationObserver(() => {
+          this.priceElement.textContent = this.mainPrice.textContent;
+        });
+        priceObserver.observe(this.mainPrice, { childList: true, subtree: true });
+      }
+
+      // Add to cart action
+      if (this.addToCartBtn && this.mainAddToCart) {
+        this.addToCartBtn.addEventListener('click', () => {
+          this.mainAddToCart.click();
+        });
+      }
+    }
+  }
+
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', () => new StickyBuyButton());
+  } else {
+    new StickyBuyButton();
+  }
+</script>
+
+{% schema %}
+{
+  "name": "Sticky Buy Button",
+  "settings": []
+}
+{% endschema %}

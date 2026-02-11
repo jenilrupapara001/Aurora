@@ -2,23 +2,34 @@
     "sections": {
         "main": {
             "type": "main-product",
+            "settings": {}
+        },
+        "size-guide": {
+            "type": "size-guide",
             "settings": {
-                "enable_sticky_add_to_cart": true,
-                "show_vendor": false,
-                "show_sku": true,
-                "show_share_buttons": true
+                "heading": "Size Guide"
+            }
+        },
+        "bundle-builder": {
+            "type": "bundle-builder",
+            "settings": {
+                "heading": "Complete the Look"
             }
         },
         "product-recommendations": {
             "type": "product-recommendations",
-            "settings": {
-                "heading": "You May Also Like",
-                "products_to_show": 4
-            }
+            "settings": {}
+        },
+        "sticky-buy": {
+            "type": "sticky-buy-button",
+            "settings": {}
         }
     },
     "order": [
         "main",
-        "product-recommendations"
+        "size-guide",
+        "bundle-builder",
+        "product-recommendations",
+        "sticky-buy"
     ]
 }

@@ -1,0 +1,298 @@
+<div class="size-guide-modal" data-size-guide-modal>
+  <div class="size-guide-modal__overlay" data-size-guide-close></div>
+  
+  <div class="size-guide-modal__content">
+    <div class="size-guide-modal__header">
+      <h2>{{ section.settings.heading }}</h2>
+      <button type="button" class="size-guide-modal__close" data-size-guide-close aria-label="Close">
+        {% render 'icon', icon: 'close' %}
+      </button>
+    </div>
+
+    <div class="size-guide-modal__body">
+      {%- if section.settings.description != blank -%}
+        <div class="size-guide-description">
+          {{ section.settings.description }}
+        </div>
+      {%- endif -%}
+
+      <div class="size-guide-table">
+        <table>
+          <thead>
+            <tr>
+              <th>{{ 'products.size_guide.size' | t }}</th>
+              <th>{{ 'products.size_guide.chest' | t }}</th>
+              <th>{{ 'products.size_guide.waist' | t }}</th>
+              <th>{{ 'products.size_guide.hips' | t }}</th>
+            </tr>
+          </thead>
+          <tbody>
+            {%- for block in section.blocks -%}
+              <tr>
+                <td><strong>{{ block.settings.size }}</strong></td>
+                <td>{{ block.settings.chest }}</td>
+                <td>{{ block.settings.waist }}</td>
+                <td>{{ block.settings.hips }}</td>
+              </tr>
+            {%- endfor -%}
+          </tbody>
+        </table>
+      </div>
+
+      {%- if section.settings.measurement_guide != blank -%}
+        <div class="size-guide-measurements">
+          <h3>{{ 'products.size_guide.how_to_measure' | t }}</h3>
+          {{ section.settings.measurement_guide }}
+        </div>
+      {%- endif -%}
+    </div>
+  </div>
+</div>
+
+<style>
+  .size-guide-modal {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 9999;
+    display: none;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .size-guide-modal.active {
+    display: flex;
+  }
+
+  .size-guide-modal__overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.7);
+  }
+
+  .size-guide-modal__content {
+    position: relative;
+    width: 90%;
+    max-width: 800px;
+    max-height: 90vh;
+    background-color: var(--color-neutral-light);
+    overflow-y: auto;
+  }
+
+  .size-guide-modal__header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 2rem;
+    border-bottom: 1px solid var(--color-border);
+  }
+
+  .size-guide-modal__header h2 {
+    font-size: 1.5rem;
+    margin: 0;
+  }
+
+  .size-guide-modal__close {
+    background: none;
+    border: none;
+    padding: 0.5rem;
+    cursor: pointer;
+  }
+
+  .size-guide-modal__close svg {
+    width: 24px;
+    height: 24px;
+  }
+
+  .size-guide-modal__body {
+    padding: 2rem;
+  }
+
+  .size-guide-description {
+    margin-bottom: 2rem;
+    line-height: 1.6;
+  }
+
+  .size-guide-table {
+    overflow-x: auto;
+    margin-bottom: 2rem;
+  }
+
+  .size-guide-table table {
+    width: 100%;
+    border-collapse: collapse;
+  }
+
+  .size-guide-table th,
+  .size-guide-table td {
+    padding: 1rem;
+    text-align: left;
+    border: 1px solid var(--color-border);
+  }
+
+  .size-guide-table th {
+    background-color: var(--color-neutral-medium);
+    font-weight: 600;
+  }
+
+  .size-guide-measurements h3 {
+    font-size: 1.25rem;
+    margin-bottom: 1rem;
+  }
+
+  .size-guide-measurements {
+    padding-top: 2rem;
+    border-top: 1px solid var(--color-border);
+  }
+</style>
+
+<script>
+  class SizeGuide {
+    constructor() {
+      this.modal = document.querySelector('[data-size-guide-modal]');
+      this.closeButtons = document.querySelectorAll('[data-size-guide-close]');
+      
+      this.init();
+    }
+
+    init() {
+      document.addEventListener('click', (e) => {
+        const trigger = e.target.closest('[data-size-guide-open]');
+        if (trigger) {
+          e.preventDefault();
+          this.open();
+        }
+      });
+
+      this.closeButtons.forEach(button => {
+        button.addEventListener('click', () => this.close());
+      });
+
+      document.addEventListener('keydown', (e) => {
+        if (e.key === 'Escape' && this.modal.classList.contains('active')) {
+          this.close();
+        }
+      });
+    }
+
+    open() {
+      this.modal.classList.add('active');
+      document.body.style.overflow = 'hidden';
+    }
+
+    close() {
+      this.modal.classList.remove('active');
+      document.body.style.overflow = '';
+    }
+  }
+
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', () => new SizeGuide());
+  } else {
+    new SizeGuide();
+  }
+</script>
+
+{% schema %}
+{
+  "name": "Size Guide",
+  "settings": [
+    {
+      "type": "text",
+      "id": "heading",
+      "label": "Heading",
+      "default": "Size Guide"
+    },
+    {
+      "type": "richtext",
+      "id": "description",
+      "label": "Description"
+    },
+    {
+      "type": "richtext",
+      "id": "measurement_guide",
+      "label": "How to measure guide"
+    }
+  ],
+  "blocks": [
+    {
+      "type": "size",
+      "name": "Size",
+      "settings": [
+        {
+          "type": "text",
+          "id": "size",
+          "label": "Size",
+          "default": "M"
+        },
+        {
+          "type": "text",
+          "id": "chest",
+          "label": "Chest (inches)",
+          "default": "38-40"
+        },
+        {
+          "type": "text",
+          "id": "waist",
+          "label": "Waist (inches)",
+          "default": "32-34"
+        },
+        {
+          "type": "text",
+          "id": "hips",
+          "label": "Hips (inches)",
+          "default": "40-42"
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Size Guide",
+      "blocks": [
+        {
+          "type": "size",
+          "settings": {
+            "size": "XS",
+            "chest": "32-34",
+            "waist": "26-28",
+            "hips": "34-36"
+          }
+        },
+        {
+          "type": "size",
+          "settings": {
+            "size": "S",
+            "chest": "34-36",
+            "waist": "28-30",
+            "hips": "36-38"
+          }
+        },
+        {
+          "type": "size",
+          "settings": {
+            "size": "M",
+            "chest": "38-40",
+            "waist": "32-34",
+            "hips": "40-42"
+          }
+        },
+        {
+          "type": "size",
+          "settings": {
+            "size": "L",
+            "chest": "42-44",
+            "waist": "36-38",
+            "hips": "44-46"
+          }
+        }
+      ]
+    }
+  ]
+}
+{% endschema %}

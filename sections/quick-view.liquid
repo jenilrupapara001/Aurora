@@ -1,0 +1,224 @@
+<div class="quick-view-modal" data-quick-view-modal>
+  <div class="quick-view-modal__overlay" data-quick-view-close></div>
+  
+  <div class="quick-view-modal__content">
+    <button type="button" class="quick-view-modal__close" data-quick-view-close aria-label="Close">
+      {% render 'icon', icon: 'close' %}
+    </button>
+
+    <div class="quick-view-modal__body" data-quick-view-body>
+      <div class="quick-view-loading">
+        <div class="spinner"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<style>
+  .quick-view-modal {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 9999;
+    display: none;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .quick-view-modal.active {
+    display: flex;
+  }
+
+  .quick-view-modal__overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.7);
+    animation: fadeIn 0.3s ease;
+  }
+
+  .quick-view-modal__content {
+    position: relative;
+    width: 90%;
+    max-width: 1000px;
+    max-height: 90vh;
+    background-color: var(--color-neutral-light);
+    overflow-y: auto;
+    animation: slideUp 0.3s ease;
+  }
+
+  .quick-view-modal__close {
+    position: absolute;
+    top: 1rem;
+    right: 1rem;
+    z-index: 10;
+    background-color: var(--color-neutral-light);
+    border: none;
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+  }
+
+  .quick-view-modal__close svg {
+    width: 20px;
+    height: 20px;
+  }
+
+  .quick-view-modal__body {
+    padding: 2rem;
+  }
+
+  .quick-view-loading {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 400px;
+  }
+
+  .spinner {
+    width: 40px;
+    height: 40px;
+    border: 3px solid var(--color-border);
+    border-top-color: var(--color-primary);
+    border-radius: 50%;
+    animation: spin 0.8s linear infinite;
+  }
+
+  .quick-view-product {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 3rem;
+  }
+
+  .quick-view-product__image img {
+    width: 100%;
+    height: auto;
+  }
+
+  .quick-view-product__info h2 {
+    font-size: 2rem;
+    margin-bottom: 1rem;
+  }
+
+  .quick-view-product__price {
+    font-size: 1.5rem;
+    margin-bottom: 1.5rem;
+  }
+
+  .quick-view-product__description {
+    margin-bottom: 2rem;
+    line-height: 1.6;
+  }
+
+  .quick-view-product__link {
+    display: inline-block;
+    margin-top: 1rem;
+    color: var(--color-primary);
+    font-weight: 600;
+  }
+
+  @keyframes fadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
+  }
+
+  @keyframes slideUp {
+    from {
+      opacity: 0;
+      transform: translateY(20px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+
+  @keyframes spin {
+    to { transform: rotate(360deg); }
+  }
+
+  @media (max-width: 767px) {
+    .quick-view-product {
+      grid-template-columns: 1fr;
+      gap: 2rem;
+    }
+
+    .quick-view-modal__content {
+      width: 100%;
+      max-height: 100vh;
+    }
+  }
+</style>
+
+<script>
+  class QuickView {
+    constructor() {
+      this.modal = document.querySelector('[data-quick-view-modal]');
+      this.body = document.querySelector('[data-quick-view-body]');
+      this.closeButtons = document.querySelectorAll('[data-quick-view-close]');
+      
+      this.init();
+    }
+
+    init() {
+      document.addEventListener('click', (e) => {
+        const trigger = e.target.closest('[data-quick-view]');
+        if (trigger) {
+          e.preventDefault();
+          const handle = trigger.dataset.quickView;
+          this.open(handle);
+        }
+      });
+
+      this.closeButtons.forEach(button => {
+        button.addEventListener('click', () => this.close());
+      });
+
+      document.addEventListener('keydown', (e) => {
+        if (e.key === 'Escape' && this.modal.classList.contains('active')) {
+          this.close();
+        }
+      });
+    }
+
+    async open(handle) {
+      this.modal.classList.add('active');
+      document.body.style.overflow = 'hidden';
+
+      try {
+        const response = await fetch(`/products/${handle}?view=quick-view`);
+        const html = await response.text();
+        this.body.innerHTML = html;
+      } catch (error) {
+        this.body.innerHTML = '<p>Error loading product</p>';
+      }
+    }
+
+    close() {
+      this.modal.classList.remove('active');
+      document.body.style.overflow = '';
+    }
+  }
+
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', () => new QuickView());
+  } else {
+    new QuickView();
+  }
+</script>
+
+{% schema %}
+{
+  "name": "Quick View Modal",
+  "settings": []
+}
+{% endschema %}

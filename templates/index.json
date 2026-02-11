@@ -3,50 +3,59 @@
         "hero": {
             "type": "hero-banner",
             "settings": {
-                "heading": "Elevate Your Style",
-                "subheading": "New Collection",
-                "button_text": "Shop Now",
-                "height": "large",
-                "text_alignment": "center",
-                "overlay_opacity": 30
+                "height": "large"
             }
+        },
+        "social-proof": {
+            "type": "social-proof",
+            "settings": {}
         },
         "featured-collections": {
             "type": "featured-collections",
-            "blocks": {
-                "collection-1": {
-                    "type": "collection",
-                    "settings": {}
-                },
-                "collection-2": {
-                    "type": "collection",
-                    "settings": {}
-                },
-                "collection-3": {
-                    "type": "collection",
-                    "settings": {}
-                }
-            },
-            "block_order": [
-                "collection-1",
-                "collection-2",
-                "collection-3"
-            ],
             "settings": {
                 "heading": "Shop by Category"
+            }
+        },
+        "lookbook": {
+            "type": "lookbook-grid",
+            "settings": {
+                "heading": "Shop the Look"
             }
         },
         "featured-products": {
             "type": "featured-products",
             "settings": {
-                "heading": "Trending Now",
-                "products_to_show": 8
+                "heading": "Trending Now"
             }
+        },
+        "influencer": {
+            "type": "influencer-spotlight",
+            "settings": {
+                "heading": "As Seen On"
+            }
+        },
+        "image-text": {
+            "type": "image-with-text",
+            "settings": {}
+        },
+        "promo-grid": {
+            "type": "promo-grid",
+            "settings": {}
+        },
+        "newsletter": {
+            "type": "newsletter",
+            "settings": {}
         }
     },
     "order": [
         "hero",
+        "social-proof",
         "featured-collections",
-        "featured-products"
+        "lookbook",
+        "featured-products",
+        "influencer",
+        "image-text",
+        "promo-grid",
+        "newsletter"
     ]
 }
